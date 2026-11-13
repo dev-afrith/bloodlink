@@ -28,3 +28,8 @@ use the editor.
   own key and store it in Secrets.
 - **Secrets.** Lovable manages them. Do not put secret values in the repo.
 <!-- LOVABLE:END -->
+
+## Application architecture
+- Keep navigation on TanStack file routes and shared navigation/footer in the root shell; this preserves the framework's typed navigation and page metadata.
+- Keep fictional records and pure filters in a browser-safe data module, and prototype submissions only in temporary React state; no backend or real medical coordination is part of this prototype.
+- Define visual roles and reusable layout styles in src/styles.css; use design-system buttons and reduced-motion-aware Framer Motion for consistent interactions.

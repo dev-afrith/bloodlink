@@ -10,33 +10,193 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AboutRouteImport } from './routes/about'
+import { Route as BecomeADonorRouteImport } from './routes/become-a-donor'
+import { Route as BloodBanksRouteImport } from './routes/blood-banks'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as DonationGuideRouteImport } from './routes/donation-guide'
+import { Route as EligibilityRouteImport } from './routes/eligibility'
+import { Route as FaqRouteImport } from './routes/faq'
+import { Route as FindDonorsRouteImport } from './routes/find-donors'
+import { Route as HowItWorksRouteImport } from './routes/how-it-works'
+import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as RequestsRouteImport } from './routes/requests'
+import { Route as TermsRouteImport } from './routes/terms'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BecomeADonorRoute = BecomeADonorRouteImport.update({
+  id: '/become-a-donor',
+  path: '/become-a-donor',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BloodBanksRoute = BloodBanksRouteImport.update({
+  id: '/blood-banks',
+  path: '/blood-banks',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DonationGuideRoute = DonationGuideRouteImport.update({
+  id: '/donation-guide',
+  path: '/donation-guide',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EligibilityRoute = EligibilityRouteImport.update({
+  id: '/eligibility',
+  path: '/eligibility',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FaqRoute = FaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FindDonorsRoute = FindDonorsRouteImport.update({
+  id: '/find-donors',
+  path: '/find-donors',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HowItWorksRoute = HowItWorksRouteImport.update({
+  id: '/how-it-works',
+  path: '/how-it-works',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RequestsRoute = RequestsRouteImport.update({
+  id: '/requests',
+  path: '/requests',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TermsRoute = TermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/become-a-donor': typeof BecomeADonorRoute
+  '/blood-banks': typeof BloodBanksRoute
+  '/contact': typeof ContactRoute
+  '/donation-guide': typeof DonationGuideRoute
+  '/eligibility': typeof EligibilityRoute
+  '/faq': typeof FaqRoute
+  '/find-donors': typeof FindDonorsRoute
+  '/how-it-works': typeof HowItWorksRoute
+  '/privacy': typeof PrivacyRoute
+  '/requests': typeof RequestsRoute
+  '/terms': typeof TermsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/become-a-donor': typeof BecomeADonorRoute
+  '/blood-banks': typeof BloodBanksRoute
+  '/contact': typeof ContactRoute
+  '/donation-guide': typeof DonationGuideRoute
+  '/eligibility': typeof EligibilityRoute
+  '/faq': typeof FaqRoute
+  '/find-donors': typeof FindDonorsRoute
+  '/how-it-works': typeof HowItWorksRoute
+  '/privacy': typeof PrivacyRoute
+  '/requests': typeof RequestsRoute
+  '/terms': typeof TermsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/become-a-donor': typeof BecomeADonorRoute
+  '/blood-banks': typeof BloodBanksRoute
+  '/contact': typeof ContactRoute
+  '/donation-guide': typeof DonationGuideRoute
+  '/eligibility': typeof EligibilityRoute
+  '/faq': typeof FaqRoute
+  '/find-donors': typeof FindDonorsRoute
+  '/how-it-works': typeof HowItWorksRoute
+  '/privacy': typeof PrivacyRoute
+  '/requests': typeof RequestsRoute
+  '/terms': typeof TermsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/become-a-donor'
+    | '/blood-banks'
+    | '/contact'
+    | '/donation-guide'
+    | '/eligibility'
+    | '/faq'
+    | '/find-donors'
+    | '/how-it-works'
+    | '/privacy'
+    | '/requests'
+    | '/terms'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/about'
+    | '/become-a-donor'
+    | '/blood-banks'
+    | '/contact'
+    | '/donation-guide'
+    | '/eligibility'
+    | '/faq'
+    | '/find-donors'
+    | '/how-it-works'
+    | '/privacy'
+    | '/requests'
+    | '/terms'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/become-a-donor'
+    | '/blood-banks'
+    | '/contact'
+    | '/donation-guide'
+    | '/eligibility'
+    | '/faq'
+    | '/find-donors'
+    | '/how-it-works'
+    | '/privacy'
+    | '/requests'
+    | '/terms'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
+  BecomeADonorRoute: typeof BecomeADonorRoute
+  BloodBanksRoute: typeof BloodBanksRoute
+  ContactRoute: typeof ContactRoute
+  DonationGuideRoute: typeof DonationGuideRoute
+  EligibilityRoute: typeof EligibilityRoute
+  FaqRoute: typeof FaqRoute
+  FindDonorsRoute: typeof FindDonorsRoute
+  HowItWorksRoute: typeof HowItWorksRoute
+  PrivacyRoute: typeof PrivacyRoute
+  RequestsRoute: typeof RequestsRoute
+  TermsRoute: typeof TermsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +208,107 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/become-a-donor': {
+      id: '/become-a-donor'
+      path: '/become-a-donor'
+      fullPath: '/become-a-donor'
+      preLoaderRoute: typeof BecomeADonorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blood-banks': {
+      id: '/blood-banks'
+      path: '/blood-banks'
+      fullPath: '/blood-banks'
+      preLoaderRoute: typeof BloodBanksRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/donation-guide': {
+      id: '/donation-guide'
+      path: '/donation-guide'
+      fullPath: '/donation-guide'
+      preLoaderRoute: typeof DonationGuideRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/eligibility': {
+      id: '/eligibility'
+      path: '/eligibility'
+      fullPath: '/eligibility'
+      preLoaderRoute: typeof EligibilityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/faq': {
+      id: '/faq'
+      path: '/faq'
+      fullPath: '/faq'
+      preLoaderRoute: typeof FaqRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/find-donors': {
+      id: '/find-donors'
+      path: '/find-donors'
+      fullPath: '/find-donors'
+      preLoaderRoute: typeof FindDonorsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/how-it-works': {
+      id: '/how-it-works'
+      path: '/how-it-works'
+      fullPath: '/how-it-works'
+      preLoaderRoute: typeof HowItWorksRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/requests': {
+      id: '/requests'
+      path: '/requests'
+      fullPath: '/requests'
+      preLoaderRoute: typeof RequestsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/terms': {
+      id: '/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
+  BecomeADonorRoute: BecomeADonorRoute,
+  BloodBanksRoute: BloodBanksRoute,
+  ContactRoute: ContactRoute,
+  DonationGuideRoute: DonationGuideRoute,
+  EligibilityRoute: EligibilityRoute,
+  FaqRoute: FaqRoute,
+  FindDonorsRoute: FindDonorsRoute,
+  HowItWorksRoute: HowItWorksRoute,
+  PrivacyRoute: PrivacyRoute,
+  RequestsRoute: RequestsRoute,
+  TermsRoute: TermsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
