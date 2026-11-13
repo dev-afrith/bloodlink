@@ -28,6 +28,7 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/toast-notification";
 import { bloodGroups, locations } from "@/data/demo";
 import { useBloodRequests, type SubmittedBloodRequest } from "@/context/blood-request-context";
+import { PrintableBloodRequestReport } from "./printable-blood-request";
 
 export type { SubmittedBloodRequest };
 
@@ -260,7 +261,8 @@ export function RequestBloodForm() {
 
   return (
     <div className="space-y-8">
-      {/* Tab Switcher */}
+      {/* ── Screen-only UI: Hide completely when printing ── */}
+      <div className="request-form-screen-ui space-y-8">
       <div className="flex items-center justify-center">
         <div className="bg-slate-200/80 p-1 rounded-2xl flex items-center gap-1 shadow-inner max-w-md w-full">
           <button
@@ -1123,6 +1125,17 @@ export function RequestBloodForm() {
                   >
                     ● {trackedRecord.status}
                   </span>
+
+                  <Button
+                    type="button"
+                    onClick={() => {
+                      if (typeof window !== "undefined") window.print();
+                    }}
+                    className="bg-[#C8102E] hover:bg-[#8F1027] text-white text-xs font-bold rounded-xl h-8 px-3 shadow-2xs flex items-center gap-1.5 cursor-pointer"
+                  >
+                    <Printer size={13} />
+                    <span>Print Report</span>
+                  </Button>
                 </div>
               </div>
 
@@ -1186,6 +1199,31 @@ export function RequestBloodForm() {
           )}
         </div>
       )}
+
+      {/* ── Closing request-form-screen-ui wrapper ── */}
+      </div>
+
+      {/* ── Dedicated Print-Only Report Component ── */}
+      {/* If tracking a valid record, print that record. Otherwise if summary is open, print the newly submitted request. */}
+      {trackedRecord ? (
+        <PrintableBloodRequestReport
+          request={trackedRecord}
+          printDate={new Date().toLocaleDateString("en-GB", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric",
+          })}
+        />
+      ) : submittedRequest ? (
+        <PrintableBloodRequestReport
+          request={submittedRequest}
+          printDate={new Date().toLocaleDateString("en-GB", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric",
+          })}
+        />
+      ) : null}
     </div>
   );
 }
