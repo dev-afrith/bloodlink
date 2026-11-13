@@ -54,6 +54,7 @@ export function Navbar() {
                 to={l.to}
                 onClick={() => setOpen(false)}
                 className={path === l.to ? "nav-link active" : "nav-link"}
+                aria-current={path === l.to ? "page" : undefined}
               >
                 {l.label}
               </Link>
@@ -182,15 +183,16 @@ export function Reveal({ children, className = "" }: { children: ReactNode; clas
   return (
     <motion.div
       className={className}
-      initial={reduced ? false : { opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.12 }}
-      transition={{ duration: 0.55 }}
+      initial={reduced ? false : "hidden"}
+      whileInView="visible"
+      variants={{ hidden: { opacity: 0, y: 18 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1], staggerChildren: reduced ? 0 : 0.065 } } }}
+      viewport={{ once: true, amount: 0.08 }}
     >
       {children}
     </motion.div>
   );
 }
+export const itemReveal = { hidden: { opacity: 0, y: 12 }, visible: { opacity: 1, y: 0, transition: { duration: 0.45 } } };
 export function SectionHeading({
   eyebrow,
   title,

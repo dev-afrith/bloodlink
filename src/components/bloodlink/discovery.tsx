@@ -21,7 +21,7 @@ import {
   type Filters,
   type Donor,
 } from "@/data/demo";
-import { DemoNotice, SectionHeading } from "./shared";
+import { DemoNotice } from "./shared";
 
 export function GroupSelect({
   value,
@@ -35,7 +35,7 @@ export function GroupSelect({
   return (
     <label className="field">
       <span>{label}</span>
-      <select value={value} onChange={(e) => onChange(e.target.value)}>
+      <select aria-label={label} value={value} onChange={(e) => onChange(e.target.value)}>
         <option value="">All blood groups</option>
         {bloodGroups.map((g) => (
           <option key={g}>{g}</option>
@@ -77,7 +77,7 @@ export function DonorSearch({
         <GroupSelect value={filters.group || ""} onChange={(v) => update("group", v)} />
         <label className="field">
           <span>State</span>
-          <select value={filters.state || ""} onChange={(e) => update("state", e.target.value)}>
+          <select aria-label="State" value={filters.state || ""} onChange={(e) => update("state", e.target.value)}>
             <option value="">All states</option>
             {Object.keys(locations).map((s) => (
               <option key={s}>{s}</option>
@@ -86,7 +86,7 @@ export function DonorSearch({
         </label>
         <label className="field">
           <span>City</span>
-          <select value={filters.city || ""} onChange={(e) => update("city", e.target.value)}>
+          <select aria-label="City" value={filters.city || ""} onChange={(e) => update("city", e.target.value)}>
             <option value="">All cities</option>
             {(filters.state ? locations[filters.state] : Object.values(locations).flat())?.map(
               (c) => (
@@ -98,6 +98,7 @@ export function DonorSearch({
         <label className="field">
           <span>Neighbourhood</span>
           <input
+            aria-label="Neighbourhood"
             placeholder="Area or location"
             value={filters.location || ""}
             onChange={(e) => update("location", e.target.value)}
@@ -250,6 +251,7 @@ export function Requests({ compact = false }: { compact?: boolean }) {
           <Button
             key={g}
             variant={group === g ? "default" : "outline"}
+            aria-pressed={group === g}
             size="sm"
             onClick={() => setGroup(g)}
           >

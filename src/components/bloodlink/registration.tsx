@@ -97,13 +97,15 @@ export function RegistrationForm() {
               <div className="form-grid">
                 <label className="field">
                   <span>Full Name</span>
-                  <input placeholder="Your full name" {...register("name")} autoComplete="name" />
+                  <input aria-label="Full Name" aria-invalid={!!errors.name} placeholder="Your full name" {...register("name")} autoComplete="name" />
                   {errors.name && <small className="field-error">{errors.name.message}</small>}
                 </label>
                 <label className="field">
                   <span>Email Address</span>
                   <input
                     type="email"
+                    aria-label="Email Address"
+                    aria-invalid={!!errors.email}
                     placeholder="you@example.com"
                     {...register("email")}
                     autoComplete="email"
@@ -114,6 +116,8 @@ export function RegistrationForm() {
                   <span>Mobile Number</span>
                   <input
                     placeholder="10-digit mobile number"
+                    aria-label="Mobile Number"
+                    aria-invalid={!!errors.mobile}
                     inputMode="tel"
                     {...register("mobile")}
                     autoComplete="tel"
@@ -122,7 +126,7 @@ export function RegistrationForm() {
                 </label>
                 <label className="field">
                   <span>Blood Group</span>
-                  <select {...register("group")}>
+                  <select aria-label="Blood Group" aria-invalid={!!errors.group} {...register("group")}>
                     <option value="">Select blood group</option>
                     {bloodGroups.map((g) => (
                       <option key={g}>{g}</option>
@@ -132,7 +136,7 @@ export function RegistrationForm() {
                 </label>
                 <label className="field">
                   <span>State</span>
-                  <select {...register("state", { onChange: () => setValue("city", "") })}>
+                  <select aria-label="State" aria-invalid={!!errors.state} {...register("state", { onChange: () => setValue("city", "") })}>
                     <option value="">Select state</option>
                     {Object.keys(locations).map((s) => (
                       <option key={s}>{s}</option>
@@ -142,7 +146,7 @@ export function RegistrationForm() {
                 </label>
                 <label className="field">
                   <span>City</span>
-                  <select {...register("city")}>
+                  <select aria-label="City" aria-invalid={!!errors.city} {...register("city")}>
                     <option value="">Select city</option>
                     {locations[state]?.map((c) => (
                       <option key={c}>{c}</option>

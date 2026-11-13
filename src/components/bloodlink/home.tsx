@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import { useInView, useReducedMotion } from "framer-motion";
+import { motion, useInView, useReducedMotion } from "framer-motion";
 import {
   ArrowRight,
   ArrowUpRight,
@@ -18,9 +18,9 @@ import {
   Link2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import hero from "@/assets/donation-hero.jpg";
+import hero from "@/assets/donation-refined.jpg";
 import { bloodGroups, education, stories } from "@/data/demo";
-import { Reveal, SectionHeading, FinalCTA, TrustItem } from "./shared";
+import { Reveal, SectionHeading, FinalCTA, TrustItem, itemReveal } from "./shared";
 import { DonorSearch, Requests } from "./discovery";
 import { RegistrationForm } from "./registration";
 export function HowSteps() {
@@ -116,8 +116,8 @@ export function Home() {
         <img
           className="hero-photo"
           src={hero}
-          width={1536}
-          height={1024}
+          width={1920}
+          height={1080}
           alt="A volunteer donating blood with a caring nurse at a bright modern clinic"
           fetchPriority="high"
         />
@@ -126,20 +126,12 @@ export function Home() {
             <span className="hero-tag">
               <Heart size={12} /> A CONNECTION THAT COULD CHANGE EVERYTHING
             </span>
-            <h1>
-              One Drop Can Make
-              <br />A{" "}
-              <em>
-                World of
-                <br />
-                Difference.
-              </em>
-            </h1>
+            <motion.h1 variants={itemReveal}><span className="hero-name">BloodLink</span>One Drop Can Make<br />A <em>World of<br />Difference.</em></motion.h1>
             <p className="hero-copy">
               Connecting blood donors, hospitals, and communities to make lifesaving connections
               faster, simpler, and more accessible.
             </p>
-            <div className="button-row">
+            <motion.div className="button-row" variants={itemReveal}>
               <Button asChild size="lg">
                 <Link to="/find-donors">
                   <Search />
@@ -152,7 +144,7 @@ export function Home() {
                   Become a Donor
                 </Link>
               </Button>
-            </div>
+            </motion.div>
             <div className="hero-trust">
               <TrustItem>Built Around Voluntary Donation</TrustItem>
               <TrustItem>Community Driven</TrustItem>
@@ -235,7 +227,7 @@ export function Home() {
                   cta: "Join the Community",
                 },
               ].map((a) => (
-                <article className="quick-card" key={a.title}>
+                <motion.article className="quick-card" key={a.title} variants={itemReveal}>
                   <div className="quick-icon">
                     <a.icon size={22} />
                   </div>
@@ -247,7 +239,7 @@ export function Home() {
                       <ArrowUpRight />
                     </Link>
                   </Button>
-                </article>
+                </motion.article>
               ))}
             </div>
           </Reveal>
