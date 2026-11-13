@@ -11,15 +11,22 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as BecomeADonorRouteImport } from './routes/become-a-donor'
 import { Route as BloodBanksRouteImport } from './routes/blood-banks'
+import { Route as BloodCompatibilityRouteImport } from './routes/blood-compatibility'
+import { Route as BloodGroupsRouteImport } from './routes/blood-groups'
+import { Route as CompleteProfileRouteImport } from './routes/complete-profile'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as DonationGuideRouteImport } from './routes/donation-guide'
+import { Route as EditProfileRouteImport } from './routes/edit-profile'
 import { Route as EligibilityRouteImport } from './routes/eligibility'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as FindDonorsRouteImport } from './routes/find-donors'
 import { Route as HowItWorksRouteImport } from './routes/how-it-works'
 import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as RequestBloodRouteImport } from './routes/request-blood'
 import { Route as RequestsRouteImport } from './routes/requests'
 import { Route as TermsRouteImport } from './routes/terms'
 
@@ -33,6 +40,11 @@ const AboutRoute = AboutRouteImport.update({
   path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const BecomeADonorRoute = BecomeADonorRouteImport.update({
   id: '/become-a-donor',
   path: '/become-a-donor',
@@ -43,14 +55,39 @@ const BloodBanksRoute = BloodBanksRouteImport.update({
   path: '/blood-banks',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BloodCompatibilityRoute = BloodCompatibilityRouteImport.update({
+  id: '/blood-compatibility',
+  path: '/blood-compatibility',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BloodGroupsRoute = BloodGroupsRouteImport.update({
+  id: '/blood-groups',
+  path: '/blood-groups',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CompleteProfileRoute = CompleteProfileRouteImport.update({
+  id: '/complete-profile',
+  path: '/complete-profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DonationGuideRoute = DonationGuideRouteImport.update({
   id: '/donation-guide',
   path: '/donation-guide',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EditProfileRoute = EditProfileRouteImport.update({
+  id: '/edit-profile',
+  path: '/edit-profile',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EligibilityRoute = EligibilityRouteImport.update({
@@ -78,6 +115,11 @@ const PrivacyRoute = PrivacyRouteImport.update({
   path: '/privacy',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RequestBloodRoute = RequestBloodRouteImport.update({
+  id: '/request-blood',
+  path: '/request-blood',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RequestsRoute = RequestsRouteImport.update({
   id: '/requests',
   path: '/requests',
@@ -92,30 +134,44 @@ const TermsRoute = TermsRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/auth': typeof AuthRoute
   '/become-a-donor': typeof BecomeADonorRoute
   '/blood-banks': typeof BloodBanksRoute
+  '/blood-compatibility': typeof BloodCompatibilityRoute
+  '/blood-groups': typeof BloodGroupsRoute
+  '/complete-profile': typeof CompleteProfileRoute
   '/contact': typeof ContactRoute
+  '/dashboard': typeof DashboardRoute
   '/donation-guide': typeof DonationGuideRoute
+  '/edit-profile': typeof EditProfileRoute
   '/eligibility': typeof EligibilityRoute
   '/faq': typeof FaqRoute
   '/find-donors': typeof FindDonorsRoute
   '/how-it-works': typeof HowItWorksRoute
   '/privacy': typeof PrivacyRoute
+  '/request-blood': typeof RequestBloodRoute
   '/requests': typeof RequestsRoute
   '/terms': typeof TermsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/auth': typeof AuthRoute
   '/become-a-donor': typeof BecomeADonorRoute
   '/blood-banks': typeof BloodBanksRoute
+  '/blood-compatibility': typeof BloodCompatibilityRoute
+  '/blood-groups': typeof BloodGroupsRoute
+  '/complete-profile': typeof CompleteProfileRoute
   '/contact': typeof ContactRoute
+  '/dashboard': typeof DashboardRoute
   '/donation-guide': typeof DonationGuideRoute
+  '/edit-profile': typeof EditProfileRoute
   '/eligibility': typeof EligibilityRoute
   '/faq': typeof FaqRoute
   '/find-donors': typeof FindDonorsRoute
   '/how-it-works': typeof HowItWorksRoute
   '/privacy': typeof PrivacyRoute
+  '/request-blood': typeof RequestBloodRoute
   '/requests': typeof RequestsRoute
   '/terms': typeof TermsRoute
 }
@@ -123,15 +179,22 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/auth': typeof AuthRoute
   '/become-a-donor': typeof BecomeADonorRoute
   '/blood-banks': typeof BloodBanksRoute
+  '/blood-compatibility': typeof BloodCompatibilityRoute
+  '/blood-groups': typeof BloodGroupsRoute
+  '/complete-profile': typeof CompleteProfileRoute
   '/contact': typeof ContactRoute
+  '/dashboard': typeof DashboardRoute
   '/donation-guide': typeof DonationGuideRoute
+  '/edit-profile': typeof EditProfileRoute
   '/eligibility': typeof EligibilityRoute
   '/faq': typeof FaqRoute
   '/find-donors': typeof FindDonorsRoute
   '/how-it-works': typeof HowItWorksRoute
   '/privacy': typeof PrivacyRoute
+  '/request-blood': typeof RequestBloodRoute
   '/requests': typeof RequestsRoute
   '/terms': typeof TermsRoute
 }
@@ -140,45 +203,66 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
+    | '/auth'
     | '/become-a-donor'
     | '/blood-banks'
+    | '/blood-compatibility'
+    | '/blood-groups'
+    | '/complete-profile'
     | '/contact'
+    | '/dashboard'
     | '/donation-guide'
+    | '/edit-profile'
     | '/eligibility'
     | '/faq'
     | '/find-donors'
     | '/how-it-works'
     | '/privacy'
+    | '/request-blood'
     | '/requests'
     | '/terms'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/about'
+    | '/auth'
     | '/become-a-donor'
     | '/blood-banks'
+    | '/blood-compatibility'
+    | '/blood-groups'
+    | '/complete-profile'
     | '/contact'
+    | '/dashboard'
     | '/donation-guide'
+    | '/edit-profile'
     | '/eligibility'
     | '/faq'
     | '/find-donors'
     | '/how-it-works'
     | '/privacy'
+    | '/request-blood'
     | '/requests'
     | '/terms'
   id:
     | '__root__'
     | '/'
     | '/about'
+    | '/auth'
     | '/become-a-donor'
     | '/blood-banks'
+    | '/blood-compatibility'
+    | '/blood-groups'
+    | '/complete-profile'
     | '/contact'
+    | '/dashboard'
     | '/donation-guide'
+    | '/edit-profile'
     | '/eligibility'
     | '/faq'
     | '/find-donors'
     | '/how-it-works'
     | '/privacy'
+    | '/request-blood'
     | '/requests'
     | '/terms'
   fileRoutesById: FileRoutesById
@@ -186,15 +270,22 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  AuthRoute: typeof AuthRoute
   BecomeADonorRoute: typeof BecomeADonorRoute
   BloodBanksRoute: typeof BloodBanksRoute
+  BloodCompatibilityRoute: typeof BloodCompatibilityRoute
+  BloodGroupsRoute: typeof BloodGroupsRoute
+  CompleteProfileRoute: typeof CompleteProfileRoute
   ContactRoute: typeof ContactRoute
+  DashboardRoute: typeof DashboardRoute
   DonationGuideRoute: typeof DonationGuideRoute
+  EditProfileRoute: typeof EditProfileRoute
   EligibilityRoute: typeof EligibilityRoute
   FaqRoute: typeof FaqRoute
   FindDonorsRoute: typeof FindDonorsRoute
   HowItWorksRoute: typeof HowItWorksRoute
   PrivacyRoute: typeof PrivacyRoute
+  RequestBloodRoute: typeof RequestBloodRoute
   RequestsRoute: typeof RequestsRoute
   TermsRoute: typeof TermsRoute
 }
@@ -215,6 +306,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/become-a-donor': {
       id: '/become-a-donor'
       path: '/become-a-donor'
@@ -229,6 +327,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BloodBanksRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/blood-compatibility': {
+      id: '/blood-compatibility'
+      path: '/blood-compatibility'
+      fullPath: '/blood-compatibility'
+      preLoaderRoute: typeof BloodCompatibilityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blood-groups': {
+      id: '/blood-groups'
+      path: '/blood-groups'
+      fullPath: '/blood-groups'
+      preLoaderRoute: typeof BloodGroupsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/complete-profile': {
+      id: '/complete-profile'
+      path: '/complete-profile'
+      fullPath: '/complete-profile'
+      preLoaderRoute: typeof CompleteProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/contact': {
       id: '/contact'
       path: '/contact'
@@ -236,11 +355,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContactRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/donation-guide': {
       id: '/donation-guide'
       path: '/donation-guide'
       fullPath: '/donation-guide'
       preLoaderRoute: typeof DonationGuideRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/edit-profile': {
+      id: '/edit-profile'
+      path: '/edit-profile'
+      fullPath: '/edit-profile'
+      preLoaderRoute: typeof EditProfileRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/eligibility': {
@@ -278,6 +411,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PrivacyRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/request-blood': {
+      id: '/request-blood'
+      path: '/request-blood'
+      fullPath: '/request-blood'
+      preLoaderRoute: typeof RequestBloodRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/requests': {
       id: '/requests'
       path: '/requests'
@@ -298,15 +438,22 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  AuthRoute: AuthRoute,
   BecomeADonorRoute: BecomeADonorRoute,
   BloodBanksRoute: BloodBanksRoute,
+  BloodCompatibilityRoute: BloodCompatibilityRoute,
+  BloodGroupsRoute: BloodGroupsRoute,
+  CompleteProfileRoute: CompleteProfileRoute,
   ContactRoute: ContactRoute,
+  DashboardRoute: DashboardRoute,
   DonationGuideRoute: DonationGuideRoute,
+  EditProfileRoute: EditProfileRoute,
   EligibilityRoute: EligibilityRoute,
   FaqRoute: FaqRoute,
   FindDonorsRoute: FindDonorsRoute,
   HowItWorksRoute: HowItWorksRoute,
   PrivacyRoute: PrivacyRoute,
+  RequestBloodRoute: RequestBloodRoute,
   RequestsRoute: RequestsRoute,
   TermsRoute: TermsRoute,
 }

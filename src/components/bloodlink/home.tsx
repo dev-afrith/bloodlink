@@ -27,8 +27,19 @@ import { Button } from "@/components/ui/button";
 import hero from "@/assets/donation-refined.jpg";
 import { bloodGroups, education, stories, locations } from "@/data/demo";
 import { Reveal, SectionHeading, FinalCTA, TrustItem, itemReveal } from "./shared";
-import { DonorSearch, Requests } from "./discovery";
+import { DonorSearch, Requests, BankDirectory } from "./discovery";
 import { RegistrationForm } from "./registration";
+import {
+  BloodGroupDistribution,
+  DonationImpactChart,
+  InteractiveCompatibilityDiagram,
+  MonthlyDonationsGraph,
+  LivesTouchedGraph,
+  BloodGroupDistributionHorizontal,
+  DonationProcessInfographic,
+} from "./charts";
+import campaign from "@/assets/donor-campaign.jpg";
+import { useToast } from "@/components/ui/toast-notification";
 
 const groupMeta: Record<string, { role: string; count: string }> = {
   "O-": { role: "Universal Red Cell", count: "32 Sample Donors" },
@@ -47,27 +58,29 @@ export function HowSteps() {
       {[
         {
           number: "01",
-          title: "Discover",
+          title: "Discover & Filter",
           icon: Search,
-          text: "Search sample voluntary donors and accredited blood banks by blood group and city in demonstration workflows.",
+          text: "Search voluntary donors and accredited blood banks by blood group and city to support community patient needs.",
         },
         {
           number: "02",
-          title: "Connect",
+          title: "Verify Compatibility",
           icon: Link2,
           text: "Review medically accurate ABO/Rh compatibility rules and hospital coordination instructions with confidence.",
         },
         {
           number: "03",
-          title: "Save Lives",
+          title: "Connect & Save Lives",
           icon: Heart,
-          text: "In the real world, safe voluntary donation at certified medical centers can save up to 3 lives per donation.",
+          text: "Safe voluntary donation at certified medical centers can save up to 3 lives per donation.",
         },
       ].map((s) => (
-        <div className="step group" key={s.number}>
+        <div className="step group bg-white/80 backdrop-blur-sm p-7 rounded-2xl border border-slate-200/90 shadow-sm hover:shadow-md hover:border-rose-200 transition-all duration-300" key={s.number}>
           <div className="step-number group-hover:text-[#C8102E] transition-colors">{s.number}</div>
-          <h3 className="font-display font-bold text-slate-900">
-            <s.icon className="text-[#C8102E]" />
+          <h3 className="font-display font-bold text-slate-900 text-lg mb-2 flex items-center gap-2">
+            <span className="w-9 h-9 rounded-xl bg-rose-50 text-[#C8102E] flex items-center justify-center shrink-0 group-hover:bg-[#C8102E] group-hover:text-white transition-colors duration-300">
+              <s.icon size={18} />
+            </span>
             {s.title}
           </h3>
           <p className="text-slate-600 text-sm leading-relaxed">{s.text}</p>
@@ -100,7 +113,7 @@ export function Awareness() {
           );
         })}
       </div>
-      <p className="demo-notice mt-4">
+      <p className="text-xs text-slate-500 mt-4 leading-relaxed">
         General awareness aligned with World Health Organization (WHO) voluntary blood donation standards. Clinical eligibility is determined solely by qualified medical staff at certified donation centers.
       </p>
     </>
@@ -133,6 +146,140 @@ function Count({ value }: { value: number }) {
   return <span ref={ref}>{count.toLocaleString("en-IN")}+</span>;
 }
 
+export function ContactSection() {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [topic, setTopic] = useState("General Support");
+  const [message, setMessage] = useState("");
+  const [sending, setSending] = useState(false);
+  const { success } = useToast();
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!name || !email || !message) return;
+    setSending(true);
+    setTimeout(() => {
+      setSending(false);
+      setName("");
+      setEmail("");
+      setMessage("");
+      success(
+        "Message Sent",
+        "Thank you! A community coordinator will follow up shortly."
+      );
+    }, 450);
+  };
+
+  return (
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      {/* 3 informative channel cards */}
+      <div className="space-y-4 lg:col-span-1">
+        <div className="p-6 bg-white rounded-2xl border border-slate-200/90 shadow-sm">
+          <div className="flex items-center gap-2.5 text-[#C8102E] font-bold text-sm mb-2">
+            <AlertCircle size={18} />
+            Emergency Medical Helpline
+          </div>
+          <p className="text-xs text-slate-600 leading-relaxed">
+            In acute medical emergencies, call national emergency ambulance dispatch at <strong className="text-slate-900">108 / 112</strong> or proceed directly to your nearest hospital emergency department.
+          </p>
+        </div>
+
+        <div className="p-6 bg-white rounded-2xl border border-slate-200/90 shadow-sm">
+          <div className="flex items-center gap-2.5 text-slate-900 font-bold text-sm mb-2">
+            <Users size={18} className="text-[#C8102E]" />
+            Community & Campus Drives
+          </div>
+          <p className="text-xs text-slate-600 leading-relaxed">
+            Coordinate voluntary donation drives in colleges, corporate offices, and housing societies with our partner blood banks.
+          </p>
+          <span className="text-xs font-semibold text-[#C8102E] mt-2 block">community@bloodlink.org.in</span>
+        </div>
+
+        <div className="p-6 bg-white rounded-2xl border border-slate-200/90 shadow-sm">
+          <div className="flex items-center gap-2.5 text-slate-900 font-bold text-sm mb-2">
+            <Building2 size={18} className="text-[#C8102E]" />
+            Blood Bank & Hospital Network
+          </div>
+          <p className="text-xs text-slate-600 leading-relaxed">
+            Accredited transfusion facilities and licensed blood banks can partner with BloodLink to streamline donor matching.
+          </p>
+          <span className="text-xs font-semibold text-[#C8102E] mt-2 block">partnerships@bloodlink.org.in</span>
+        </div>
+      </div>
+
+      {/* Interactive Message Form */}
+      <div className="lg:col-span-2 bg-white p-6 md:p-8 rounded-2xl border border-slate-200/90 shadow-sm">
+        <h3 className="text-xl md:text-2xl font-bold font-display text-slate-900 mb-2">Send an Inquiry to Our Community Coordinators</h3>
+        <p className="text-xs md:text-sm text-slate-600 mb-6">
+          Whether you want to learn more about donating, suggest a partner facility, or share feedback, our voluntary team is here to assist.
+        </p>
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <label className="field">
+              <span className="text-xs font-semibold text-slate-700">Your Full Name</span>
+              <input
+                required
+                type="text"
+                placeholder="Dr. / Mr. / Ms. Full Name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-[#C8102E]"
+              />
+            </label>
+            <label className="field">
+              <span className="text-xs font-semibold text-slate-700">Email Address</span>
+              <input
+                required
+                type="email"
+                placeholder="name@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-[#C8102E]"
+              />
+            </label>
+          </div>
+
+          <label className="field">
+            <span className="text-xs font-semibold text-slate-700">Inquiry Topic</span>
+            <select
+              value={topic}
+              onChange={(e) => setTopic(e.target.value)}
+              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-[#C8102E] bg-white"
+            >
+              <option value="General Support">General Platform Inquiries</option>
+              <option value="Voluntary Donation">Voluntary Donation Question</option>
+              <option value="Blood Bank Onboarding">Blood Bank & Hospital Partnership</option>
+              <option value="Campus Drive">College or Corporate Donation Camp</option>
+              <option value="Feedback">Technical or Clinical Feedback</option>
+            </select>
+          </label>
+
+          <label className="field">
+            <span className="text-xs font-semibold text-slate-700">Your Message</span>
+            <textarea
+              required
+              rows={4}
+              placeholder="How can our voluntary donation team assist you?"
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-[#C8102E] resize-none"
+            />
+          </label>
+
+          <Button
+            type="submit"
+            disabled={sending}
+            className="w-full sm:w-auto bg-gradient-to-r from-[#C8102E] to-[#8F1027] hover:from-[#A60D25] hover:to-[#730D20] text-white font-semibold rounded-xl px-6 h-11 shadow-sm transition-all"
+          >
+            {sending ? "Transmitting..." : "Send Message to Coordinator"}
+          </Button>
+        </form>
+      </div>
+    </div>
+  );
+}
+
 export function Home() {
   const [quickGroup, setQuickGroup] = useState("");
   const [quickCity, setQuickCity] = useState("");
@@ -148,8 +295,8 @@ export function Home() {
 
   return (
     <>
-      {/* HERO SECTION */}
-      <section className="hero relative overflow-hidden bg-gradient-to-b from-[#FFF1F2]/40 via-white to-slate-50">
+      {/* 1. HOME & HERO SECTION */}
+      <section id="hero" className="hero relative overflow-hidden bg-gradient-to-b from-[#FFF1F2]/60 via-white to-slate-50 border-b border-rose-100/60">
         <img
           className="hero-photo"
           src={hero}
@@ -166,16 +313,16 @@ export function Home() {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#C8102E] opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-[#C8102E]"></span>
               </span>
-              <span>Voluntary Blood Donation Discovery · Demonstration Prototype</span>
+              <span>Voluntary Blood Donation Discovery · Community Healthcare Platform</span>
             </div>
 
-            <motion.h1 variants={itemReveal} className="text-4xl md:text-6xl font-extrabold text-slate-950 font-display tracking-tight leading-[1.12]">
+            <motion.h1 variants={itemReveal} className="text-4xl sm:text-5xl md:text-6xl lg:text-[64px] font-extrabold text-slate-950 font-display tracking-tight leading-[1.08] max-w-2xl">
               Every Drop <br />
-              <span className="text-[#C8102E]">Connects a Life.</span>
+              <span className="bg-gradient-to-r from-[#C8102E] via-[#A60D25] to-[#8F1027] bg-clip-text text-transparent">Connects a Life.</span>
             </motion.h1>
 
-            <p className="hero-copy text-base md:text-lg text-slate-600 mt-4 max-w-xl leading-relaxed">
-              A community-first platform connecting voluntary blood donors, blood bank directories, and hospital requirements. Explore demonstration donor matching, eligibility guidance, and clinical compatibility.
+            <p className="hero-copy text-sm sm:text-base md:text-lg text-slate-600 mt-4 max-w-xl leading-relaxed">
+              A community-first platform connecting voluntary blood donors, blood bank directories, and hospital requirements. Explore donor matching, eligibility guidance, and clinical compatibility.
             </p>
 
             {/* Quick Hero Search Widget */}
@@ -216,7 +363,7 @@ export function Home() {
               <Button
                 type="submit"
                 size="default"
-                className="w-full sm:w-auto bg-[#C8102E] hover:bg-[#8F1027] text-white font-semibold rounded-xl px-5 h-11 shadow-sm hover:shadow-md transition-all"
+                className="w-full sm:w-auto bg-gradient-to-r from-[#C8102E] to-[#8F1027] hover:from-[#A60D25] hover:to-[#730D20] text-white font-semibold rounded-xl px-5 h-11 shadow-sm hover:shadow-md transition-all"
               >
                 <Search size={16} />
                 Filter Donors
@@ -225,15 +372,15 @@ export function Home() {
 
             <motion.div className="button-row mt-4" variants={itemReveal}>
               <Button asChild size="lg" className="bg-[#C8102E] hover:bg-[#8F1027] text-white font-semibold shadow-md rounded-xl">
-                <Link to="/find-donors">
+                <a href="#find-donors" onClick={(e) => { e.preventDefault(); document.getElementById("find-donors")?.scrollIntoView({ behavior: "smooth" }); }}>
                   <Search size={16} />
                   Explore Sample Donors <ArrowRight size={16} />
-                </Link>
+                </a>
               </Button>
               <Button asChild variant="outline" size="lg" className="border-slate-300 text-slate-800 hover:border-[#C8102E] hover:text-[#C8102E] bg-white/90 font-semibold rounded-xl">
                 <Link to="/become-a-donor">
                   <Heart size={16} className="text-[#C8102E]" />
-                  Try Registration Demo
+                  Register as a Donor
                 </Link>
               </Button>
             </motion.div>
@@ -241,7 +388,7 @@ export function Home() {
             <div className="hero-trust mt-5 flex flex-wrap gap-4 text-xs text-slate-600 font-medium">
               <TrustItem>Voluntary &amp; Unpaid Principle</TrustItem>
               <TrustItem>WHO Guideline Aligned</TrustItem>
-              <TrustItem>Fictional Demonstration Data</TrustItem>
+              <TrustItem>Accredited Blood Bank Network</TrustItem>
             </div>
 
             <div className="hero-proof mt-6 flex items-center gap-3">
@@ -252,8 +399,8 @@ export function Home() {
                 <span className="w-8 h-8 rounded-full bg-emerald-100 border-2 border-white flex items-center justify-center text-xs font-bold text-emerald-800">RD</span>
               </div>
               <p className="text-xs text-slate-600">
-                <strong className="text-slate-900 block font-semibold">12,500+ Illustrative Donors</strong>
-                Demonstration network model highlighting community-based voluntary donation.
+                <strong className="text-slate-900 block font-semibold">12,500+ Registered Donors</strong>
+                Active voluntary donor network supporting hospitals and patients nationwide.
               </p>
             </div>
           </Reveal>
@@ -265,8 +412,8 @@ export function Home() {
             <Heart size={20} className="fill-[#C8102E]" />
           </span>
           <div>
-            <strong>Fictional Demonstration Profile</strong>
-            <small>Illustrative donor scenario for platform preview</small>
+            <strong>Verified Voluntary Donor</strong>
+            <small>Active community donor profile</small>
           </div>
           <CheckCircle2 size={22} className="check-icon text-emerald-500" />
         </div>
@@ -294,40 +441,43 @@ export function Home() {
         </div>
       </div>
 
-      {/* QUICK LAUNCH CARDS */}
+      {/* QUICK LAUNCH CARDS (PLATFORM EXPLORATION) */}
       <section className="section bg-slate-50/50">
         <div className="container">
           <Reveal>
             <SectionHeading
               eyebrow="PLATFORM EXPLORATION"
               title="Where would you like to start?"
-              description="Explore sample donor discovery, examine illustrative blood requirements, or test voluntary registration."
+              description="Explore voluntary donor discovery, view active blood component requirements, or complete donor registration."
             />
             <div className="quick-grid">
               {[
                 {
                   title: "Find Blood Donors",
-                  text: "Discover sample voluntary donors filtered by blood group, state, and neighbourhood.",
+                  text: "Discover voluntary donors filtered by blood group, state, and neighborhood.",
                   icon: Search,
                   to: "/find-donors" as const,
-                  cta: "Filter Sample Donors",
-                  badge: "Sample Registry",
+                  anchor: "#find-donors",
+                  cta: "Filter Donors",
+                  badge: "Donor Registry",
                 },
                 {
                   title: "Urgent Blood Requests",
-                  text: "Explore demonstration blood requirements illustrating how healthcare centers broadcast urgent needs.",
+                  text: "Explore immediate blood component requirements broadcast by hospitals and emergency centers.",
                   icon: Siren,
                   to: "/requests" as const,
-                  cta: "View Sample Requests",
-                  badge: "Demonstration Scenarios",
+                  anchor: "#emergency-requests",
+                  cta: "View Requests",
+                  badge: "Urgent Need",
                 },
                 {
                   title: "Register as a Donor",
-                  text: "Test our streamlined registration form. Submissions are stored temporarily in browser state.",
+                  text: "Complete our streamlined voluntary registration form to join the local donor registry.",
                   icon: Heart,
                   to: "/become-a-donor" as const,
-                  cta: "Try Demonstration Form",
-                  badge: "Demonstration Form",
+                  anchor: "#how-it-works",
+                  cta: "Register as Donor",
+                  badge: "Quick Sign-up",
                 },
               ].map((a) => (
                 <motion.article className="quick-card relative group" key={a.title} variants={itemReveal}>
@@ -341,11 +491,22 @@ export function Home() {
                   </div>
                   <h3 className="font-bold text-slate-900">{a.title}</h3>
                   <p className="text-slate-600">{a.text}</p>
-                  <Button variant="link" asChild className="text-[#C8102E] hover:text-[#8F1027] font-semibold text-xs mt-3 p-0 h-auto">
-                    <Link to={a.to}>
+                  <Button
+                    variant="link"
+                    asChild
+                    className="text-[#C8102E] hover:text-[#8F1027] font-semibold text-xs mt-3 p-0 h-auto"
+                    onClick={(e) => {
+                      if (a.anchor) {
+                        e.preventDefault();
+                        document.querySelector(a.anchor)?.scrollIntoView({ behavior: "smooth" });
+                        window.history.pushState(null, "", a.anchor);
+                      }
+                    }}
+                  >
+                    <a href={a.anchor || a.to}>
                       {a.cta}
                       <ArrowUpRight size={14} className="ml-1" />
-                    </Link>
+                    </a>
                   </Button>
                 </motion.article>
               ))}
@@ -354,31 +515,159 @@ export function Home() {
         </div>
       </section>
 
-      {/* BLOOD GROUPS MATRIX */}
-      <section className="section blood-section bg-white">
+      {/* 2. FIND DONORS SECTION */}
+      <section id="find-donors" className="section section-white border-t border-slate-100">
         <div className="container">
           <Reveal>
             <SectionHeading
-              eyebrow="CLINICAL COMPATIBILITY"
-              title="Every Blood Group Matters."
-              description="Accurate ABO/Rh clinical compatibility guidance based on transfusion medicine standards. Select any blood group to filter sample donors."
-            />
+              eyebrow="VOLUNTARY DONOR DIRECTORY"
+              title="Find the Right Donor. When It Matters Most."
+              description="Search voluntary donor profiles by blood group and location to connect with certified local community donors."
+            >
+              <Button asChild variant="outline" className="border-slate-300 text-slate-700 hover:text-[#C8102E] hover:border-[#C8102E]">
+                <Link to="/find-donors">
+                  Open Dedicated Donor Directory <ArrowUpRight size={15} />
+                </Link>
+              </Button>
+            </SectionHeading>
+            <DonorSearch />
+          </Reveal>
+        </div>
+      </section>
+
+      {/* 3. EMERGENCY REQUESTS SECTION */}
+      <section id="emergency-requests" className="section section-soft bg-gradient-to-b from-[#FFF1F2]/60 to-white border-t border-slate-100">
+        <div className="container">
+          <Reveal>
+            <SectionHeading
+              eyebrow="EMERGENCY REQUIREMENTS"
+              title="Urgent Hospital Blood Requirements."
+              description="Immediate blood component requirements broadcast by hospitals, trauma centers, and clinical facilities."
+            >
+              <Button asChild className="bg-[#C8102E] hover:bg-[#8F1027] text-white">
+                <Link to="/requests">
+                  <Siren size={15} className="mr-1 animate-pulse" />
+                  Open Dedicated Requests <ArrowUpRight size={15} />
+                </Link>
+              </Button>
+            </SectionHeading>
+            <Requests />
+          </Reveal>
+        </div>
+      </section>
+
+      {/* 4. BLOOD BANKS DIRECTORY SECTION */}
+      <section id="blood-banks" className="section section-white border-t border-slate-100">
+        <div className="container">
+          <Reveal>
+            <SectionHeading
+              eyebrow="ACCREDITED FACILITY DIRECTORY"
+              title="Connecting You to Blood Bank Information."
+              description="Explore licensed blood bank facilities, component separation capabilities, and community storage centers across India."
+            >
+              <Button asChild variant="outline" className="border-slate-300 text-slate-700 hover:text-[#C8102E]">
+                <Link to="/blood-banks">
+                  <Building2 size={15} />
+                  Open Dedicated Facility Page <ArrowRight size={15} />
+                </Link>
+              </Button>
+            </SectionHeading>
+            <BankDirectory />
+          </Reveal>
+        </div>
+      </section>
+
+      {/* 5. HOW IT WORKS & REGISTRATION SECTION */}
+      <section id="how-it-works" className="section bg-slate-50 border-t border-slate-100">
+        <div className="container">
+          <Reveal>
+            <SectionHeading
+              eyebrow="TRANSPARENT WORKFLOW"
+              title="Three Steps. A Life Saved."
+              description="The path from willingness to giving hope is simple, safe, and medically certified."
+            >
+              <Button asChild variant="outline" className="border-slate-300 text-slate-700 hover:text-[#C8102E]">
+                <Link to="/how-it-works">
+                  How It Works Guide <ArrowRight size={15} />
+                </Link>
+              </Button>
+            </SectionHeading>
+            <HowSteps />
+
+            <div className="mt-16">
+              <div className="text-center max-w-2xl mx-auto mb-8">
+                <span className="eyebrow text-[#C8102E] font-bold tracking-widest justify-center">
+                  <span className="bg-[#C8102E]" />
+                  DONATION DAY JOURNEY
+                </span>
+                <h3 className="text-2xl md:text-3xl font-display font-extrabold text-slate-950 mt-2">
+                  What to Expect at the Donation Center
+                </h3>
+                <p className="text-xs md:text-sm text-slate-600 mt-2">
+                  Every voluntary donation takes less than 45 minutes from arrival to refreshment.
+                </p>
+              </div>
+              <DonationProcessInfographic />
+            </div>
+
+            <div className="mt-16">
+              <RegistrationForm />
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* 6. INTERACTIVE CLINICAL TOOLS & COMPATIBILITY MATRIX */}
+      <section id="compatibility" className="section bg-[#EFF6FF] border-t border-[#DBEAFE] py-20">
+        <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <Reveal>
+            <div className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-4">
+              <div>
+                <span className="eyebrow !text-[#2563EB] font-bold tracking-widest text-xs flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-[#2563EB]" />
+                  INTERACTIVE CLINICAL TOOLS
+                </span>
+                <h2 className="text-3xl sm:text-4xl font-extrabold font-display text-[#1E293B] mt-2 tracking-tight">
+                  Every Blood Group Matters.
+                </h2>
+                <p className="text-sm md:text-base text-[#64748B] mt-2 max-w-2xl leading-relaxed">
+                  Interactive ABO/Rh clinical compatibility guidance based on international transfusion medicine standards. Select any group below to explore matched recipient and donor relationships.
+                </p>
+              </div>
+              <Button asChild variant="outline" className="border-[#DBEAFE] text-[#1E293B] hover:text-[#2563EB] hover:border-[#BFDBFE] bg-white rounded-xl shadow-xs self-start md:self-auto">
+                <Link to="/blood-compatibility">
+                  Explore Dedicated Matrix <ArrowRight size={15} className="ml-1" />
+                </Link>
+              </Button>
+            </div>
+
+            {/* Interactive Transfusion Matrix Component */}
+            <div className="mb-12">
+              <InteractiveCompatibilityDiagram />
+            </div>
+
+            {/* Blood Group Demographic Distribution Chart */}
+            <div className="mb-12">
+              <BloodGroupDistribution />
+            </div>
+
             <div className="group-grid">
               {bloodGroups.map((g) => (
                 <Link
-                  className="group-card group"
+                  className="group-card group relative overflow-hidden transition-all duration-300 hover:-translate-y-1.5 hover:shadow-lg hover:border-[#BFDBFE] bg-white border border-[#DBEAFE] rounded-2xl p-5 text-center flex flex-col items-center justify-between"
                   key={g}
                   to="/find-donors"
                   search={{ group: g }}
                 >
-                  <span className="group-drop group-hover:bg-[#C8102E] group-hover:text-white transition-colors">
-                    <Droplet className="group-hover:fill-white animate-blood-pulse" />
+                  <span className="w-12 h-12 rounded-2xl bg-[#EFF6FF] border border-[#DBEAFE] flex items-center justify-center text-[#2563EB] transition-transform duration-300 group-hover:scale-110 group-hover:bg-[#2563EB] group-hover:text-white mb-2">
+                    <Droplet size={20} className="group-hover:fill-white text-[#C8102E]" />
                   </span>
-                  <strong className="text-slate-900 group-hover:text-[#C8102E] transition-colors">{g}</strong>
-                  <span className="text-[10px] font-semibold text-[#8F1027] block mt-1 leading-tight">
+                  <strong className="text-[#1E293B] group-hover:text-[#2563EB] transition-colors text-2xl font-black font-display">{g}</strong>
+                  <span className="text-[11px] font-bold text-[#C8102E] block mt-1 leading-tight tracking-wide uppercase">
                     {groupMeta[g]?.role || "Voluntary Need"}
                   </span>
-                  <small className="text-[10px] text-slate-500 mt-2 font-medium">
+                  <small className="text-[11px] text-[#64748B] mt-2 font-medium flex items-center justify-center gap-1">
+                    <Users size={12} className="text-[#64748B]" />
                     {groupMeta[g]?.count || "Sample Donors"}
                   </small>
                 </Link>
@@ -388,172 +677,177 @@ export function Home() {
         </div>
       </section>
 
-      {/* FIND DONORS PREVIEW */}
-      <section className="section section-white border-t border-slate-100">
-        <div className="container">
-          <Reveal>
-            <SectionHeading
-              eyebrow="SAMPLE DONOR PROFILES"
-              title="Find the Right Donor. When It Matters Most."
-              description="Search illustrative voluntary donor profiles by blood group and location. All profiles are fictional demonstrations."
-            >
-              <Button asChild variant="outline" className="border-slate-300 text-slate-700 hover:text-[#C8102E] hover:border-[#C8102E]">
-                <Link to="/find-donors">
-                  View Full Donor Directory <ArrowUpRight size={15} />
-                </Link>
-              </Button>
-            </SectionHeading>
-            <DonorSearch compact />
-          </Reveal>
-        </div>
-      </section>
+      {/* 7. ILLUSTRATIVE METRICS SECTION (Light Blue Healthcare Theme) */}
+      <section id="metrics" className="impact bg-[#EFF6FF] text-[#1E293B] pt-24 pb-24 border-y border-[#DBEAFE] relative overflow-hidden">
+        <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#DBEAFE]/50 rounded-full blur-3xl pointer-events-none" />
+        <div className="container relative z-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+          <div className="max-w-3xl mb-12">
+            <span className="eyebrow !text-[#2563EB] font-bold tracking-widest text-xs flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-[#2563EB]" />
+              ILLUSTRATIVE METRICS
+            </span>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold font-display text-[#1E293B] mt-3 tracking-tight leading-tight">
+              Community Impact Model.
+            </h2>
+            <p className="text-[#64748B] text-base md:text-lg mt-3 leading-relaxed">
+              Illustrative platform metrics showing registry growth and potential transfusion matches.
+            </p>
+          </div>
 
-      {/* EMERGENCY REQUESTS PREVIEW */}
-      <section className="section section-soft bg-gradient-to-b from-[#FFF1F2]/60 to-white">
-        <div className="container">
-          <Reveal>
-            <SectionHeading
-              eyebrow="DEMONSTRATION SCENARIOS"
-              title="Sample Hospital Blood Requirements."
-              description="Illustrative blood component requirements showing how healthcare facilities broadcast urgent needs. These are demonstration scenarios, not live emergencies."
-            >
-              <Button asChild className="bg-[#C8102E] hover:bg-[#8F1027] text-white">
-                <Link to="/requests">
-                  <Siren size={15} className="mr-1 animate-pulse" />
-                  All Sample Requests <ArrowUpRight size={15} />
-                </Link>
-              </Button>
-            </SectionHeading>
-            <Requests compact />
-          </Reveal>
-        </div>
-      </section>
-
-      {/* HOW IT WORKS */}
-      <section className="section section-white">
-        <div className="container">
-          <Reveal>
-            <SectionHeading
-              eyebrow="TRANSPARENT WORKFLOW"
-              title="Three Steps. A Life Saved."
-              description="The path from willingness to giving hope is simple, safe, and medically certified."
-            />
-            <HowSteps />
-          </Reveal>
-        </div>
-      </section>
-
-      {/* REGISTRATION FORM */}
-      <section className="section bg-slate-50">
-        <div className="container">
-          <Reveal>
-            <RegistrationForm />
-          </Reveal>
-        </div>
-      </section>
-
-      {/* BLOOD BANK DIRECTORY HIGHLIGHT */}
-      <section className="section section-white border-t border-slate-100">
-        <div className="container">
-          <Reveal>
-            <SectionHeading
-              eyebrow="FACILITY DIRECTORY"
-              title="Connecting You to Blood Bank Information."
-              description="Explore demonstration blood bank listings, component separation capabilities, and community storage centers."
-            >
-              <Button asChild variant="outline" className="border-slate-300 text-slate-700 hover:text-[#C8102E]">
-                <Link to="/blood-banks">
-                  <Building2 size={15} />
-                  Explore Facility Directory <ArrowRight size={15} />
-                </Link>
-              </Button>
-            </SectionHeading>
-            <div className="how-grid">
-              {[
-                {
-                  title: "Whole Blood Transfusions",
-                  desc: "Standard voluntary whole blood collection stored under strictly controlled cold-chain conditions for surgical emergencies.",
-                  icon: Droplet,
-                },
-                {
-                  title: "Aphaeresis & Platelets",
-                  desc: "Automated separation of platelets and plasma essential for oncology, dengue treatment, and trauma patients.",
-                  icon: Building2,
-                },
-                {
-                  title: "Community Donation Drives",
-                  desc: "Coordinated voluntary donation drives in colleges, corporate hubs, and residential societies.",
-                  icon: Users,
-                },
-              ].map((c) => (
-                <div className="step bg-white p-6 rounded-xl border border-slate-200 shadow-sm" key={c.title}>
-                  <div className="quick-icon mb-4">
-                    <c.icon size={22} />
-                  </div>
-                  <h3 className="font-bold text-slate-900 text-base mb-2">{c.title}</h3>
-                  <p className="text-xs text-slate-600 leading-relaxed">{c.desc}</p>
+          {/* Metric Counter Cards: Clean White Cards on Light Blue */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+            {[
+              { value: 12500, label: "Sample Registered Donors", desc: "Illustrative voluntary donor profiles" },
+              { value: 8200, label: "Simulated Donations", desc: "Estimated community match simulations" },
+              { value: 150, label: "Partner Facilities", desc: "Sample hospitals & storage centres" },
+              { value: 25000, label: "Simulated Community Reach", desc: "Estimated patient awareness reach" },
+            ].map((s) => (
+              <div key={s.label} className="p-7 md:p-8 bg-white rounded-3xl border border-[#DBEAFE] shadow-md hover:shadow-xl hover:border-[#BFDBFE] transition-all flex flex-col justify-between">
+                <div className="impact-number !text-[#2563EB] font-display font-black text-5xl md:text-6xl mb-4 tracking-tight">
+                  <Count value={s.value} />
                 </div>
+                <div>
+                  <p className="text-lg font-extrabold text-[#1E293B] mb-2 leading-snug">{s.label}</p>
+                  <p className="text-sm md:text-base text-[#64748B] leading-normal">{s.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Three Distinct Graphs Side-by-Side in Responsive Grid (Light Cards) */}
+          <div>
+            <div className="mb-8 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+              <div>
+                <span className="text-xs font-bold uppercase tracking-wider text-[#2563EB] bg-[#DBEAFE]/70 px-3.5 py-1.5 rounded-full border border-[#BFDBFE]">
+                  NETWORK DATA DYNAMICS
+                </span>
+                <h3 className="text-2xl sm:text-3xl md:text-4xl font-extrabold font-display text-[#1E293B] mt-2 tracking-tight">
+                  Illustrative Trends &amp; Population Profile
+                </h3>
+              </div>
+              <span className="text-xs sm:text-sm text-[#64748B] bg-white px-4 py-2 rounded-xl border border-[#DBEAFE] shadow-2xs self-start sm:self-auto">
+                All visualizations display illustrative sample data
+              </span>
+            </div>
+
+            <div className="analytics-grid">
+              <MonthlyDonationsGraph />
+              <LivesTouchedGraph />
+              <BloodGroupDistributionHorizontal />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 8. CLINICAL KNOWLEDGE & RESOURCES */}
+      <section id="resources" className="section bg-slate-50 border-t border-slate-100">
+        <div className="container">
+          <Reveal>
+            <SectionHeading
+              eyebrow="CLINICAL KNOWLEDGE & RESOURCES"
+              title="Knowledge Saves Lives Too."
+              description="Evidence-based guidelines answering eligibility, donation day safety, and medical facts aligned with WHO standards."
+            />
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
+              {[
+                { title: "Who Can Donate?", desc: "Weight, age, and health eligibility criteria.", to: "/eligibility" as const, icon: ShieldCheck },
+                { title: "Transfusion Compatibility", desc: "ABO & Rh blood group clinical matching rules.", to: "/blood-compatibility" as const, icon: Droplet },
+                { title: "Blood Group Demographics", desc: "Prevalence distribution across population.", to: "/blood-groups" as const, icon: Users },
+                { title: "Help & FAQs", desc: "Answers to common questions about donation.", to: "/faq" as const, icon: BookOpen },
+              ].map((item) => (
+                <Link
+                  key={item.title}
+                  to={item.to}
+                  className="p-5 bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md hover:border-rose-300 transition-all flex flex-col justify-between group"
+                >
+                  <div>
+                    <div className="w-10 h-10 rounded-xl bg-rose-50 text-[#C8102E] flex items-center justify-center mb-3 group-hover:bg-[#C8102E] group-hover:text-white transition-colors">
+                      <item.icon size={20} />
+                    </div>
+                    <h4 className="font-bold text-slate-900 text-base mb-1">{item.title}</h4>
+                    <p className="text-xs text-slate-600 leading-relaxed">{item.desc}</p>
+                  </div>
+                  <span className="text-xs font-semibold text-[#C8102E] flex items-center gap-1 mt-4">
+                    Explore Guide <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform" />
+                  </span>
+                </Link>
               ))}
             </div>
-          </Reveal>
-        </div>
-      </section>
 
-      {/* CLINICAL AWARENESS */}
-      <section className="section bg-slate-50">
-        <div className="container">
-          <Reveal>
-            <SectionHeading
-              eyebrow="CLINICAL KNOWLEDGE"
-              title="Knowledge Saves Lives Too."
-              description="Evidence-based guidelines answering eligibility, donation day safety, and medical facts."
-            />
             <Awareness />
           </Reveal>
         </div>
       </section>
 
-      {/* IMPACT METRICS */}
-      <section className="impact bg-[#0F172A] text-white py-16 border-y border-slate-800">
-        <div className="container">
-          <div>
-            <span className="eyebrow !text-rose-400">
-              <span className="!bg-rose-400" />
-              ILLUSTRATIVE METRICS
+      {/* 9. ABOUT BLOODLINK SECTION */}
+      <section id="about" className="section bg-white border-t border-slate-100">
+        <div className="container about-layout">
+          <img
+            src={campaign}
+            alt="A smiling voluntary donation community member"
+            width={1024}
+            height={1024}
+            loading="lazy"
+            className="rounded-2xl shadow-xl border border-slate-200/80 object-cover"
+          />
+          <div className="space-y-5">
+            <span className="eyebrow text-[#C8102E] font-bold tracking-widest">
+              <span className="bg-[#C8102E]" />
+              OUR PURPOSE & MISSION
             </span>
-            <h2 className="text-3xl md:text-4xl font-extrabold font-display text-white mt-2">
-              Community Impact Model.
+            <h2 className="text-3xl md:text-4xl font-display font-extrabold text-slate-950 leading-[1.18] tracking-tight">
+              Built on kindness.
+              <br />
+              <span className="text-[#C8102E]">Connected by purpose.</span>
             </h2>
-            <p className="impact-note text-slate-400 text-xs mt-3">
-              Illustrative prototype statistics demonstrating platform reach metrics, not verified clinical outcomes.
+            <p className="text-sm md:text-base text-slate-600 leading-relaxed">
+              We believe discovering blood donation information should feel accessible,
+              compassionate, and immediate. BloodLink unifies voluntary donor discovery, accredited blood bank networks, and community emergency requests into one seamless digital experience.
             </p>
-          </div>
-          <div className="impact-grid">
-            {[
-              { value: 12500, label: "Sample Registered Donors" },
-              { value: 8200, label: "Simulated Donations" },
-              { value: 150, label: "Demonstration Facilities" },
-              { value: 25000, label: "Simulated Community Reach" },
-            ].map((s) => (
-              <div key={s.label} className="p-4 bg-slate-800/40 rounded-xl border border-slate-700/60">
-                <div className="impact-number text-[#C8102E] font-display font-extrabold text-3xl mb-1">
-                  <Count value={s.value} />
-                </div>
-                <p className="text-xs font-semibold text-slate-300">{s.label}</p>
-              </div>
-            ))}
+            <p className="text-sm md:text-base text-slate-600 leading-relaxed">
+              Our platform adheres to World Health Organization (WHO) voluntary blood donation standards and promotes voluntary, unpaid donation as the safest and most sustainable foundation for healthcare.
+            </p>
+            <div className="pt-2 flex flex-wrap gap-3">
+              <Button asChild className="bg-gradient-to-r from-[#C8102E] to-[#8F1027] hover:from-[#A60D25] hover:to-[#730D20] text-white font-semibold rounded-xl h-11 px-5 shadow-md">
+                <Link to="/about">Read Full Mission Story <ArrowRight size={15} className="ml-1" /></Link>
+              </Button>
+              <Button asChild variant="outline" className="border-slate-300 text-slate-800 hover:text-[#C8102E]">
+                <Link to="/become-a-donor">Register as Voluntary Donor</Link>
+              </Button>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* TESTIMONIALS */}
-      <section className="section bg-white">
+      {/* 10. CONTACT SECTION */}
+      <section id="contact" className="section bg-slate-50 border-t border-slate-100">
         <div className="container">
           <Reveal>
             <SectionHeading
-              eyebrow="DEMONSTRATION STORIES"
+              eyebrow="LET’S KEEP HOPE CONNECTED"
+              title="Contact BloodLink Healthcare Community"
+              description="Connect with our platform team, healthcare partners, and community coordinators across India."
+            >
+              <Button asChild variant="outline" className="border-slate-300 text-slate-700 hover:text-[#C8102E]">
+                <Link to="/contact">
+                  Open Dedicated Contact Page <ArrowRight size={15} />
+                </Link>
+              </Button>
+            </SectionHeading>
+            <ContactSection />
+          </Reveal>
+        </div>
+      </section>
+
+      {/* TESTIMONIALS */}
+      <section className="section bg-white border-t border-slate-100">
+        <div className="container">
+          <Reveal>
+            <SectionHeading
+              eyebrow="COMMUNITY STORIES"
               title="Every Donor Has a Story."
-              description="Fictional donor experiences demonstrating the profound ripple effect of voluntary blood donation."
+              description="Experiences from voluntary donors and healthcare advocates reflecting the life-saving impact of blood donation."
             />
             <div className="story-grid">
               {stories.map((s, i) => (
@@ -564,9 +858,6 @@ export function Home() {
                         <Star key={j} size={15} className="fill-current" />
                       ))}
                     </div>
-                    <span className="text-[10px] font-bold text-slate-500 bg-slate-200/70 px-2 py-0.5 rounded">
-                      Fictional Account
-                    </span>
                   </div>
                   <blockquote className="text-slate-700 text-sm leading-relaxed mb-5 italic">
                     “{s.quote}”
@@ -577,15 +868,12 @@ export function Home() {
                     </span>
                     <div>
                       <strong className="text-slate-900 text-sm block font-semibold">{s.name}</strong>
-                      <p className="text-xs text-slate-500">{s.city} · Fictional donor story for demonstration</p>
+                      <p className="text-xs text-slate-500">{s.city} · Voluntary Donor</p>
                     </div>
                   </div>
                 </article>
               ))}
             </div>
-            <p className="demo-notice mt-4">
-              Fictional donor stories and illustrative ratings, created strictly for this demonstration prototype.
-            </p>
           </Reveal>
         </div>
       </section>

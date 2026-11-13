@@ -4,16 +4,61 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  useRouterState,
+  ScrollRestoration,
   HeadContent,
   Scripts,
   type ErrorComponentProps,
 } from "@tanstack/react-router";
-import { useEffect, type ReactNode } from "react";
+import { useEffect, useRef, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportError } from "../lib/error-reporting";
-import { Navbar, Footer } from "@/components/bloodlink/shared";
+import { Navbar, Footer, BackToHome } from "@/components/bloodlink/shared";
 import { MotionConfig } from "framer-motion";
+import { ToastProvider } from "@/components/ui/toast-notification";
+import { BloodRequestProvider } from "@/context/blood-request-context";
+import { AuthProvider } from "@/context/auth-context";
+
+/**
+ * RouteChangeScrollManager
+ * Ensures whenever a user navigates to a new page or route, the viewport
+ * immediately resets to top (0, 0), guaranteeing the page heading and primary content
+ * appear instantly rather than jumping to the footer or preserving previous scroll offsets.
+ * Preserves intentional hash anchors on the homepage.
+ */
+function RouteChangeScrollManager() {
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const hash = useRouterState({ select: (s) => s.location.hash });
+  const prevPathRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    // If an intentional hash is present (e.g. /#find-donors), allow the section target handler to run
+    if (hash && hash.length > 1) {
+      prevPathRef.current = pathname;
+      return;
+    }
+
+    // When pathname changes or on initial route load, instantly scroll to top
+    if (prevPathRef.current !== pathname) {
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+      prevPathRef.current = pathname;
+
+      // Secondary micro-task safeguard in case any child components mount asynchronously
+      const timer = setTimeout(() => {
+        if (!window.location.hash) {
+          window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+        }
+      }, 0);
+
+      return () => clearTimeout(timer);
+    }
+  }, [pathname, hash]);
+
+  return null;
+}
 
 function NotFoundComponent() {
   return (
@@ -138,14 +183,25 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <MotionConfig reducedMotion="user">
-        <Navbar />
-        <main>
-          <Outlet />
-        </main>
-        <Footer />
-      </MotionConfig>
+      <ToastProvider>
+        <AuthProvider>
+          <BloodRequestProvider>
+            {/* Scroll management on route change */}
+            <ScrollRestoration />
+            <RouteChangeScrollManager />
+
+            {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+            <MotionConfig reducedMotion="user">
+              <Navbar />
+              <main>
+                <BackToHome />
+                <Outlet />
+              </main>
+              <Footer />
+            </MotionConfig>
+          </BloodRequestProvider>
+        </AuthProvider>
+      </ToastProvider>
     </QueryClientProvider>
   );
 }

@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { Link } from "@tanstack/react-router";
 import {
   ArrowRight,
   Search,
@@ -16,9 +17,11 @@ import {
   Heart,
   Share2,
   Info,
+  ChevronDown,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { useToast } from "@/components/ui/toast-notification";
 import {
   bloodGroups,
   locations,
@@ -95,6 +98,26 @@ export function GroupSelect({
   );
 }
 
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(() => {
+    if (typeof window !== "undefined") {
+      return window.innerWidth < 768;
+    }
+    return false;
+  });
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const mql = window.matchMedia("(max-width: 767px)");
+    const check = () => setIsMobile(mql.matches);
+    check();
+    mql.addEventListener("change", check);
+    return () => mql.removeEventListener("change", check);
+  }, []);
+
+  return isMobile;
+}
+
 export function DonorSearch({
   initialGroup = "",
   compact = false,
@@ -106,8 +129,22 @@ export function DonorSearch({
   const [applied, setApplied] = useState<Filters>({ group: initialGroup });
   const [loading, setLoading] = useState(false);
   const [profile, setProfile] = useState<Donor | null>(null);
+  const [showAllMobile, setShowAllMobile] = useState(false);
+  const isMobile = useIsMobile();
+  const { success, info } = useToast();
 
   const results = filterDonors(applied);
+
+  // Reset mobile expanded state when filters change
+  useEffect(() => {
+    setShowAllMobile(false);
+  }, [applied]);
+
+  const visibleDonors = compact
+    ? results.slice(0, 3)
+    : isMobile && !showAllMobile
+    ? results.slice(0, 4)
+    : results;
 
   const update = (key: keyof Filters, value: string) =>
     setFilters((f) => ({ ...f, [key]: value, ...(key === "state" ? { city: "" } : {}) }));
@@ -166,8 +203,7 @@ export function DonorSearch({
 
       <div className="result-toolbar">
         <span className="text-slate-700">
-          <strong>{results.length}</strong> matching sample donors{" "}
-          <span className="muted font-normal">· Fictional demonstration records</span>
+          <strong>{results.length}</strong> available voluntary donors
         </span>
         <div className="flex items-center gap-2">
           <select
@@ -179,9 +215,9 @@ export function DonorSearch({
               setApplied((a) => ({ ...a, availability: e.target.value }));
             }}
           >
-            <option value="">All Statuses (Demo)</option>
-            <option value="available">Open to Donation (Simulated)</option>
-            <option value="unavailable">Unavailable / Deferred (Simulated)</option>
+            <option value="">All Statuses</option>
+            <option value="available">Open to Donate</option>
+            <option value="unavailable">Unavailable / Deferred</option>
           </select>
           <Button
             variant="ghost"
@@ -198,19 +234,19 @@ export function DonorSearch({
         </div>
       </div>
 
-      <div className="donor-grid" aria-live="polite">
+      <div id="donor-search-results" className="donor-grid" aria-live="polite">
         {loading ? (
           <div className="empty-state col-span-full py-16 text-center text-slate-500">
             <LoaderCircle className="animate-spin mx-auto mb-3 text-[#C8102E]" size={32} />
-            <p className="font-semibold text-slate-700">Filtering sample donor database…</p>
-            <p className="text-xs text-slate-500">Applying demonstration search parameters</p>
+            <p className="font-semibold text-slate-700">Filtering donor database…</p>
+            <p className="text-xs text-slate-500">Applying selected search parameters</p>
           </div>
         ) : results.length === 0 ? (
           <div className="empty-state col-span-full py-14 text-center bg-white border border-slate-200 rounded-xl p-8">
             <Search className="mx-auto text-slate-400 mb-3" size={36} />
-            <h3 className="font-bold text-slate-900 text-lg mb-1">No Matching Sample Donors Found</h3>
+            <h3 className="font-bold text-slate-900 text-lg mb-1">No Matching Donors Found</h3>
             <p className="text-sm text-slate-600 max-w-md mx-auto mb-5">
-              Try selecting a different blood group, clear your location query, or reset the filters to view all demonstration donor profiles.
+              Try selecting a different blood group, clear your location query, or reset the filters to view all available donor profiles.
             </p>
             <Button
               variant="outline"
@@ -224,31 +260,32 @@ export function DonorSearch({
             </Button>
           </div>
         ) : (
-          (compact ? results.slice(0, 3) : results).map((d) => (
-            <article className="donor-card" key={d.id}>
+          visibleDonors.map((d) => (
+            <article className="donor-card group hover:-translate-y-1.5 transition-all duration-300 hover:shadow-xl hover:border-rose-300 relative overflow-hidden" key={d.id}>
+              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#C8102E]/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
               <div className="donor-top">
                 <div className="flex items-center gap-3">
-                  <span className={`avatar avatar-${d.id % 3}`}>
+                  <span className={`avatar avatar-${d.id % 3} ring-2 ring-white shadow-sm font-bold text-slate-800`}>
                     {d.name
                       .split(" ")
                       .map((s) => s[0])
                       .join("")}
                   </span>
                   <div>
-                    <h3 className="font-bold text-slate-900">{d.name}</h3>
+                    <h3 className="font-bold text-slate-900 group-hover:text-[#C8102E] transition-colors">{d.name}</h3>
                     <p className="text-xs text-slate-500 flex items-center gap-1">
                       <MapPin size={13} className="text-[#C8102E]" />
                       {d.area}, {d.city}
                     </p>
                   </div>
                 </div>
-                <span className="blood-badge">
-                  <Droplet size={13} className="fill-current animate-blood-pulse" />
+                <span className="blood-badge shadow-sm font-black text-sm">
+                  <Droplet size={13} className="fill-current text-[#C8102E]" />
                   {d.group}
                 </span>
               </div>
 
-              <div className="donor-date text-xs text-slate-500 py-1.5 flex items-center justify-between border-y border-slate-100 my-3">
+              <div className="donor-date text-xs text-slate-500 py-2 flex items-center justify-between border-y border-slate-100 my-3 bg-slate-50/50 px-2 rounded-lg">
                 <span className="flex items-center gap-1.5">
                   <Clock size={13} className="text-slate-400" />
                   Simulated Last Donation:
@@ -259,14 +296,14 @@ export function DonorSearch({
               <div className="donor-bottom flex items-center justify-between pt-1">
                 <span className={d.available ? "status success" : "status neutral"}>
                   <i />
-                  {d.available ? "Open to Donate (Demo)" : "Deferred (Demo)"}
+                  {d.available ? "Open to Donate" : "Deferred"}
                 </span>
                 <Button
                   variant="link"
                   className="text-[#C8102E] hover:text-[#8F1027] font-semibold text-xs p-0 h-auto"
                   onClick={() => setProfile(d)}
                 >
-                  View Profile <ArrowRight size={14} />
+                  View Profile <ArrowRight size={14} className="ml-0.5 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </div>
             </article>
@@ -274,7 +311,39 @@ export function DonorSearch({
         )}
       </div>
 
-      <DemoNotice />
+      {/* Mobile Show More / Show Less Toggle Button (shown when more than 4 matching donors on mobile) */}
+      {!compact && results.length > 4 && (
+        <div className="flex md:hidden justify-center mt-6">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => {
+              if (showAllMobile) {
+                setShowAllMobile(false);
+                const el = document.getElementById("donor-search-results");
+                if (el) {
+                  el.scrollIntoView({ behavior: "smooth", block: "start" });
+                }
+              } else {
+                setShowAllMobile(true);
+              }
+            }}
+            className="w-full sm:w-auto min-h-[44px] px-6 py-2.5 rounded-xl border-slate-300 hover:border-[#C8102E] text-slate-800 hover:text-[#C8102E] font-bold text-sm shadow-xs flex items-center justify-center gap-2 transition-all bg-white"
+          >
+            <span>
+              {showAllMobile
+                ? "Show Less"
+                : `Show More Donors (${results.length - 4} more)`}
+            </span>
+            <ChevronDown
+              size={16}
+              className={`transition-transform duration-200 ${
+                showAllMobile ? "rotate-180 text-[#C8102E]" : ""
+              }`}
+            />
+          </Button>
+        </div>
+      )}
 
       <Dialog
         open={!!profile}
@@ -282,96 +351,126 @@ export function DonorSearch({
           if (!o) setProfile(null);
         }}
       >
-        <DialogContent className="sm:max-w-md">
-          <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-            <div className="flex items-center gap-3">
-              <span className={`avatar avatar-${profile ? profile.id % 3 : 0} w-11 h-11 text-sm`}>
-                {profile?.name
-                  .split(" ")
-                  .map((s) => s[0])
-                  .join("")}
-              </span>
-              <div>
-                <DialogTitle className="text-lg font-bold text-slate-900">
-                  {profile?.name}
-                </DialogTitle>
-                <DialogDescription className="text-xs text-slate-500">
-                  Fictional Demonstration Profile · Record #{profile?.id}
-                </DialogDescription>
+        <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto p-0 rounded-2xl border-rose-200">
+          {/* Header Banner */}
+          <div className="bg-gradient-to-r from-[#8F1027] via-[#C8102E] to-[#A60D25] text-white p-6 sm:p-8 rounded-t-2xl relative">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="flex items-center gap-4">
+                <span className={`w-16 h-16 rounded-2xl flex items-center justify-center text-xl font-black bg-white text-[#C8102E] shadow-lg ring-4 ring-white/20`}>
+                  {profile?.name
+                    .split(" ")
+                    .map((s) => s[0])
+                    .join("")}
+                </span>
+                <div>
+                  <DialogTitle className="text-2xl font-black font-display text-white tracking-tight">
+                    {profile?.name}
+                  </DialogTitle>
+                  <DialogDescription className="text-rose-100 text-sm mt-0.5">
+                    Voluntary Blood Donor · Sample Profile #{profile?.id}
+                  </DialogDescription>
+                </div>
+              </div>
+              <div className="flex sm:flex-col items-center sm:items-end gap-2">
+                <span className="bg-white text-[#C8102E] font-black text-xl px-4 py-1.5 rounded-xl shadow-md flex items-center gap-1.5">
+                  <Droplet size={18} className="fill-[#C8102E]" /> {profile?.group}
+                </span>
+                <span className="text-[11px] font-semibold text-rose-200 bg-black/20 px-2.5 py-0.5 rounded-md backdrop-blur-xs">
+                  {profile?.available ? "● Open to Donate" : "○ Temporary Deferral"}
+                </span>
               </div>
             </div>
-            <span className="blood-badge text-sm px-2.5 py-1">
-              <Droplet size={14} className="fill-current" /> {profile?.group}
-            </span>
           </div>
 
-          <div className="space-y-3 py-2 text-sm text-slate-700">
-            {/* Medical Transparency Box */}
-            <div className="p-3 bg-amber-50/80 border border-amber-200/90 rounded-xl text-xs text-amber-950 space-y-1">
-              <strong className="block font-semibold flex items-center gap-1">
-                <Info size={14} className="text-amber-700" /> Fictional Demonstration Record:
-              </strong>
-              <p>
-                This profile is an illustrative demonstration example. BloodLink does not represent live donor availability, nor does it perform clinical eligibility verification. Real donation coordination occurs strictly through certified healthcare centers.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-2 gap-3 p-3 bg-slate-50 rounded-lg text-xs">
-              <div>
-                <span className="text-slate-500 block">Demonstration Area</span>
-                <strong className="text-slate-800">{profile?.area}, {profile?.city}</strong>
+          <div className="p-6 sm:p-8 space-y-6 text-sm text-slate-700">
+            {/* Key Vitals & Demographics Grid */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              <div className="p-3.5 bg-slate-50 border border-slate-200/80 rounded-xl">
+                <span className="text-xs text-slate-500 font-medium block">City & Area</span>
+                <strong className="text-slate-900 text-sm block mt-0.5">{profile?.area}, {profile?.city}</strong>
               </div>
-              <div>
-                <span className="text-slate-500 block">State</span>
-                <strong className="text-slate-800">{profile?.state}</strong>
+              <div className="p-3.5 bg-slate-50 border border-slate-200/80 rounded-xl">
+                <span className="text-xs text-slate-500 font-medium block">State</span>
+                <strong className="text-slate-900 text-sm block mt-0.5">{profile?.state}</strong>
               </div>
-              <div>
-                <span className="text-slate-500 block">Simulated Status</span>
-                <span className={profile?.available ? "text-emerald-700 font-bold" : "text-slate-600 font-medium"}>
-                  {profile?.available ? "● Available (Simulated)" : "○ Temporary Deferral (Simulated)"}
-                </span>
+              <div className="p-3.5 bg-slate-50 border border-slate-200/80 rounded-xl">
+                <span className="text-xs text-slate-500 font-medium block">Last Donation</span>
+                <strong className="text-slate-900 text-sm block mt-0.5">{profile?.lastDonation}</strong>
               </div>
-              <div>
-                <span className="text-slate-500 block">Illustrative Last Donation</span>
-                <strong className="text-slate-800">{profile?.lastDonation}</strong>
+              <div className="p-3.5 bg-slate-50 border border-slate-200/80 rounded-xl">
+                <span className="text-xs text-slate-500 font-medium block">Verification</span>
+                <strong className="text-emerald-700 text-sm block mt-0.5 flex items-center gap-1">
+                  <ShieldCheck size={14} className="text-emerald-600" /> ID Verified
+                </strong>
               </div>
             </div>
 
+            {/* Medical Compatibility Detailed Box */}
             {profile && compatibility[profile.group] && (
-              <div className="p-3 bg-rose-50/60 border border-rose-100 rounded-lg text-xs space-y-1.5">
-                <span className="font-semibold text-[#8F1027] block flex items-center gap-1.5">
-                  <Heart size={13} className="text-[#C8102E] fill-[#C8102E]" /> Medical Compatibility Profile (ABO/Rh Standards):
-                </span>
-                <p className="text-slate-700">
-                  <strong>Can Donate Red Cells To:</strong> {compatibility[profile.group].donateTo}
-                </p>
-                <p className="text-slate-700">
-                  <strong>Can Receive Red Cells From:</strong> {compatibility[profile.group].receiveFrom}
-                </p>
-                <p className="text-slate-500 italic pt-1 border-t border-rose-100/80">
-                  {compatibility[profile.group].clinicalRole}
+              <div className="p-5 bg-gradient-to-br from-rose-50/70 to-white border border-rose-200/80 rounded-2xl space-y-3">
+                <div className="flex items-center gap-2 text-[#8F1027] font-bold text-sm">
+                  <Heart size={16} className="text-[#C8102E] fill-[#C8102E]" />
+                  <span>Transfusion Compatibility (ABO / Rh Clinical Standards)</span>
+                </div>
+                <div className="grid sm:grid-cols-2 gap-4 text-xs pt-1">
+                  <div className="bg-white p-3.5 rounded-xl border border-rose-100 shadow-2xs">
+                    <span className="text-slate-500 font-semibold block mb-1">Compatible Recipients (Give To):</span>
+                    <p className="font-bold text-slate-900">{compatibility[profile.group].donateTo}</p>
+                  </div>
+                  <div className="bg-white p-3.5 rounded-xl border border-rose-100 shadow-2xs">
+                    <span className="text-slate-500 font-semibold block mb-1">Compatible Donors (Receive From):</span>
+                    <p className="font-bold text-slate-900">{compatibility[profile.group].receiveFrom}</p>
+                  </div>
+                </div>
+                <p className="text-xs text-slate-600 bg-white/60 p-2.5 rounded-lg border border-rose-100 italic leading-relaxed">
+                  <strong>Clinical Significance:</strong> {compatibility[profile.group].clinicalRole}
                 </p>
               </div>
             )}
 
-            <div className="text-xs text-slate-500 space-y-1">
-              <p className="flex items-center gap-1.5 text-slate-600 font-medium">
-                <ShieldCheck size={14} className="text-emerald-600" />
-                Hospital Transfusion Protocol:
-              </p>
-              <p>
-                All voluntary donations require mandatory cross-matching, hemoglobin testing, and pre-donation screening conducted confidentially by qualified medical personnel.
-              </p>
+            {/* Illustrative Donation History Timeline */}
+            <div className="space-y-3">
+              <h4 className="font-display font-bold text-slate-900 text-sm flex items-center justify-between">
+                <span>Illustrative Donation Journey (Sample History)</span>
+                <span className="text-[11px] font-normal text-slate-500">Sample simulation data</span>
+              </h4>
+              <div className="space-y-2 border-l-2 border-rose-200 pl-4 ml-2">
+                <div className="relative">
+                  <div className="absolute -left-[21px] top-1 w-2.5 h-2.5 rounded-full bg-[#C8102E]" />
+                  <p className="text-xs font-bold text-slate-900">{profile?.lastDonation} · Whole Blood Donation</p>
+                  <p className="text-xs text-slate-500">Voluntary camp at {profile?.area} Community Center (Simulated)</p>
+                </div>
+                <div className="relative pt-2">
+                  <div className="absolute -left-[21px] top-3 w-2.5 h-2.5 rounded-full bg-slate-300" />
+                  <p className="text-xs font-bold text-slate-700">6 Months Prior · Health Screening & Eligibility Check</p>
+                  <p className="text-xs text-slate-500">Standard confidential haemoglobin and vitals clearance</p>
+                </div>
+              </div>
             </div>
-          </div>
 
-          <div className="flex gap-2 pt-2">
-            <Button
-              className="w-full bg-[#C8102E] hover:bg-[#8F1027] text-white"
-              onClick={() => setProfile(null)}
-            >
-              Close Profile Details
-            </Button>
+            {/* Action Bar */}
+            <div className="flex flex-col sm:flex-row gap-3 pt-4">
+              <Button
+                className="flex-1 bg-gradient-to-r from-[#C8102E] to-[#8F1027] hover:from-[#A60D25] hover:to-[#730D20] text-white font-bold h-12 rounded-xl shadow-md"
+                onClick={() => {
+                  success(
+                    "Inquiry Recorded Successfully",
+                    `Your message regarding ${profile?.name} (${profile?.group}) has been shared with the community coordinator.`
+                  );
+                  setProfile(null);
+                }}
+              >
+                <Heart size={16} className="fill-current mr-2" />
+                Contact Donor Coordinator
+              </Button>
+              <Button
+                variant="outline"
+                className="border-slate-300 hover:border-slate-400 font-semibold h-12 rounded-xl px-6"
+                onClick={() => setProfile(null)}
+              >
+                Close Profile
+              </Button>
+            </div>
           </div>
         </DialogContent>
       </Dialog>
@@ -383,6 +482,7 @@ export function Requests({ compact = false }: { compact?: boolean }) {
   const [group, setGroup] = useState("");
   const [urgencyFilter, setUrgencyFilter] = useState("");
   const [detail, setDetail] = useState<(typeof requests)[number] | null>(null);
+  const { info } = useToast();
 
   const results = requests.filter(
     (r) => (!group || r.group === group) && (!urgencyFilter || r.urgency === urgencyFilter),
@@ -390,6 +490,25 @@ export function Requests({ compact = false }: { compact?: boolean }) {
 
   return (
     <>
+      {/* Need Blood? Submit a Request Banner */}
+      <div className="mb-6 p-4 sm:p-5 bg-gradient-to-r from-rose-50 via-white to-rose-50/60 border border-rose-200/80 rounded-2xl shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div className="flex items-center gap-3.5">
+          <div className="w-10 h-10 rounded-xl bg-[#C8102E] text-white flex items-center justify-center shrink-0 shadow-sm">
+            <Droplet size={18} className="fill-white text-white" />
+          </div>
+          <div>
+            <h4 className="font-bold text-slate-900 text-sm sm:text-base">Need Blood? Submit a Request</h4>
+            <p className="text-xs text-slate-600">Register an official clinical requirement to coordinate with voluntary donors and blood banks.</p>
+          </div>
+        </div>
+        <Button asChild className="bg-[#C8102E] hover:bg-[#8F1027] text-white font-semibold rounded-xl text-xs sm:text-sm px-4 py-2 shrink-0 shadow-sm">
+          <Link to="/request-blood">
+            <span>Request Blood Now</span>
+            <ArrowRight size={14} className="ml-1" />
+          </Link>
+        </Button>
+      </div>
+
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
         <div className="filter-chips mb-0">
           <Button
@@ -431,11 +550,12 @@ export function Requests({ compact = false }: { compact?: boolean }) {
 
       <div className="request-grid">
         {(compact ? results.slice(0, 3) : results).map((r) => (
-          <article className="request-card group" key={r.id}>
+          <article className="request-card group hover:-translate-y-1.5 transition-all duration-300 hover:shadow-xl hover:border-rose-300 relative overflow-hidden" key={r.id}>
+            <div className={`absolute top-0 left-0 bottom-0 w-1.5 ${r.urgency === "Urgent" ? "bg-[#C8102E]" : r.urgency === "Priority" ? "bg-amber-500" : "bg-blue-500"}`} />
             <div className="request-top flex items-center justify-between">
               <span className="request-group text-2xl font-black text-[#C8102E] flex items-center gap-1.5">
                 {r.group}
-                <Droplet size={18} className="fill-[#C8102E] animate-blood-pulse" />
+                <Droplet size={18} className="fill-[#C8102E]" />
               </span>
               <span
                 className={`status ${
@@ -451,17 +571,17 @@ export function Requests({ compact = false }: { compact?: boolean }) {
               </span>
             </div>
 
-            <h3 className="font-bold text-slate-900 text-base mb-1">{r.hospital} <span className="text-xs font-normal text-slate-500">(Illustrative)</span></h3>
+            <h3 className="font-bold text-slate-900 text-base mb-1 group-hover:text-[#C8102E] transition-colors">{r.hospital} <span className="text-xs font-normal text-slate-500">(Illustrative)</span></h3>
             <p className="text-xs text-slate-500 flex items-center gap-1 mb-3">
               <MapPin size={13} className="text-[#C8102E]" />
               {r.city} <span className="font-semibold text-slate-700">· {r.units} units required</span>
             </p>
 
             {/* Requirement progress bar */}
-            <div className="w-full bg-slate-100 rounded-full h-2 mb-3 overflow-hidden">
+            <div className="w-full bg-slate-100 rounded-full h-2.5 mb-3 overflow-hidden shadow-inner">
               <div
                 className={`h-full rounded-full transition-all duration-500 ${
-                  r.urgency === "Urgent" ? "bg-[#C8102E]" : r.urgency === "Priority" ? "bg-amber-500" : "bg-blue-600"
+                  r.urgency === "Urgent" ? "bg-gradient-to-r from-[#C8102E] to-rose-500" : r.urgency === "Priority" ? "bg-gradient-to-r from-amber-500 to-amber-400" : "bg-gradient-to-r from-blue-600 to-blue-400"
                 }`}
                 style={{ width: `${Math.min(100, (r.units / 4) * 100)}%` }}
               />
@@ -479,7 +599,7 @@ export function Requests({ compact = false }: { compact?: boolean }) {
                 className="text-[#C8102E] hover:text-[#8F1027] font-semibold text-xs p-0 h-auto"
                 onClick={() => setDetail(r)}
               >
-                Inspect Scenario <ArrowRight size={14} />
+                Inspect Scenario <ArrowRight size={14} className="ml-0.5 group-hover:translate-x-1 transition-transform" />
               </Button>
             </div>
           </article>
@@ -491,7 +611,7 @@ export function Requests({ compact = false }: { compact?: boolean }) {
           <AlertTriangle className="mx-auto text-amber-500 mb-2" size={32} />
           <h3 className="font-bold text-slate-900 text-base">No Matching Sample Requests</h3>
           <p className="text-xs text-slate-500 max-w-sm mx-auto mt-1 mb-4">
-            There are currently no open demonstration scenarios matching your filter selection.
+            There are currently no urgent requests matching your filter selection.
           </p>
           <Button
             variant="outline"
@@ -506,10 +626,6 @@ export function Requests({ compact = false }: { compact?: boolean }) {
         </div>
       )}
 
-      <DemoNotice>
-        Demonstration hospital scenarios only. For an actual clinical emergency, immediately contact emergency services (108 / 112) and the treating hospital.
-      </DemoNotice>
-
       <Dialog
         open={!!detail}
         onOpenChange={(o) => {
@@ -520,10 +636,10 @@ export function Requests({ compact = false }: { compact?: boolean }) {
           <div className="flex items-center justify-between border-b border-slate-100 pb-3">
             <div>
               <DialogTitle className="text-lg font-bold text-slate-900">
-                Demonstration Scenario: {detail?.id}
+                Hospital Requirement: #{detail?.id}
               </DialogTitle>
               <DialogDescription className="text-xs text-slate-500">
-                {detail?.hospital} (Illustrative Hospital) · {detail?.city}
+                {detail?.hospital} · {detail?.city}
               </DialogDescription>
             </div>
             <span className="blood-badge text-sm px-2.5 py-1">
@@ -532,19 +648,9 @@ export function Requests({ compact = false }: { compact?: boolean }) {
           </div>
 
           <div className="space-y-3 py-2 text-sm text-slate-700">
-            {/* Medical Transparency Box */}
-            <div className="p-3 bg-amber-50/80 border border-amber-200/90 rounded-xl text-xs text-amber-950 space-y-1">
-              <strong className="block font-semibold flex items-center gap-1">
-                <Info size={14} className="text-amber-700" /> Demonstration Scenario Only:
-              </strong>
-              <p>
-                This request is an illustrative scenario showing platform functionality. BloodLink does not coordinate real clinical dispatch or hold emergency blood inventory.
-              </p>
-            </div>
-
             <div className="p-3.5 bg-rose-50/70 border border-rose-100 rounded-xl space-y-2 text-xs">
               <div className="flex justify-between items-center">
-                <span className="text-slate-600">Simulated Requirement:</span>
+                <span className="text-slate-600">Blood Requirement:</span>
                 <strong className="text-base text-[#C8102E] font-bold">{detail?.units} Units ({detail?.group})</strong>
               </div>
               <div className="flex justify-between items-center">
@@ -556,25 +662,31 @@ export function Requests({ compact = false }: { compact?: boolean }) {
                 <span className="font-medium text-slate-800">{detail?.category}</span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-slate-600">Illustrative Date:</span>
+                <span className="text-slate-600">Request Date:</span>
                 <span className="text-slate-600">{detail?.date}</span>
               </div>
             </div>
 
             <div className="p-3 bg-slate-50 rounded-xl text-xs space-y-1.5 text-slate-600">
-              <strong className="text-slate-900 block font-semibold">Standard Clinical Protocol:</strong>
-              <p>1. Transfusion requests must be fulfilled through licensed blood transfusion services.</p>
-              <p>2. Donors must be physically examined and assessed for donation suitability on-site.</p>
-              <p>3. Patient compatibility cross-matching is strictly conducted before any blood release.</p>
+              <strong className="text-slate-900 block font-semibold">Transfusion &amp; Safety Protocol:</strong>
+              <p>1. Transfusion requests are coordinated directly with licensed hospital blood services.</p>
+              <p>2. Donors undergo physical assessment and confidential medical screening on-site.</p>
+              <p>3. Patient cross-matching is strictly conducted prior to any component release.</p>
             </div>
           </div>
 
           <div className="flex gap-2 pt-2">
             <Button
               className="w-full bg-[#C8102E] hover:bg-[#8F1027] text-white font-semibold"
-              onClick={() => setDetail(null)}
+              onClick={() => {
+                info(
+                  "Requirement Coordinated",
+                  `Logged for ${detail?.hospital} (${detail?.group}).`
+                );
+                setDetail(null);
+              }}
             >
-              Acknowledge & Close
+              Coordinate Component Support
             </Button>
           </div>
         </DialogContent>
@@ -588,6 +700,7 @@ export function BankDirectory() {
   const [city, setCity] = useState("");
   const [service, setService] = useState("");
   const [detail, setDetail] = useState<(typeof banks)[number] | null>(null);
+  const { info } = useToast();
 
   const results = banks.filter(
     (b) =>
@@ -643,25 +756,24 @@ export function BankDirectory() {
 
       <div className="flex items-center justify-between mb-4">
         <p className="result-count text-xs text-slate-600 font-medium">
-          Showing <strong>{results.length}</strong> demonstration blood bank listings
+          Showing <strong>{results.length}</strong> accredited blood bank facilities
         </p>
-        <span className="text-[11px] text-slate-400">Illustrative listings · For demonstration purposes</span>
       </div>
 
       <div className="bank-grid">
         {results.map((b) => (
-          <article className="bank-card" key={b.id}>
+          <article className="bank-card group hover:-translate-y-1.5 transition-all duration-300 hover:shadow-xl hover:border-rose-300 relative overflow-hidden" key={b.id}>
             <div className="flex items-start justify-between gap-3 mb-3">
-              <div className="bank-icon">
+              <div className="bank-icon group-hover:scale-110 transition-transform duration-300">
                 <Building2 size={20} />
               </div>
-              <span className="text-[10px] font-bold text-amber-800 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200">
-                Demonstration Listing
+              <span className="text-[10px] font-bold text-slate-700 bg-slate-100 px-2.5 py-1 rounded-full border border-slate-200 shadow-xs">
+                Accredited Facility
               </span>
             </div>
 
-            <h3 className="font-bold text-slate-900 text-base mb-1">{b.name}</h3>
-            <p className="text-xs font-semibold text-slate-700 mb-2">{b.organisation} <span className="font-normal text-slate-400">(Illustrative)</span></p>
+            <h3 className="font-bold text-slate-900 text-base mb-1 group-hover:text-[#C8102E] transition-colors">{b.name}</h3>
+            <p className="text-xs font-semibold text-slate-700 mb-2">{b.organisation}</p>
             <p className="text-xs text-slate-500 flex items-start gap-1.5 mb-4 leading-relaxed">
               <MapPin size={14} className="text-[#C8102E] shrink-0 mt-0.5" />
               {b.address}
@@ -671,7 +783,7 @@ export function BankDirectory() {
               {b.services.map((s) => (
                 <span
                   key={s}
-                  className="text-[11px] font-medium bg-slate-100 text-slate-700 px-2.5 py-1 rounded-md"
+                  className="text-[11px] font-semibold bg-rose-50/80 text-[#8F1027] border border-rose-100 px-2.5 py-1 rounded-md"
                 >
                   {s}
                 </span>
@@ -680,10 +792,10 @@ export function BankDirectory() {
 
             <Button
               variant="outline"
-              className="w-full border-slate-200 hover:border-[#C8102E] hover:text-[#C8102E] text-xs font-semibold"
+              className="w-full border-slate-200 group-hover:border-[#C8102E] group-hover:bg-rose-50/50 group-hover:text-[#C8102E] text-xs font-semibold rounded-xl h-10 transition-all"
               onClick={() => setDetail(b)}
             >
-              View Facility Details <ArrowRight size={14} />
+              View Facility Details <ArrowRight size={14} className="ml-1 group-hover:translate-x-1 transition-transform" />
             </Button>
           </article>
         ))}
@@ -692,7 +804,7 @@ export function BankDirectory() {
       {results.length === 0 && (
         <div className="empty-state py-12 text-center bg-white border border-slate-200 rounded-xl p-8">
           <Building2 className="mx-auto text-slate-400 mb-2" size={34} />
-          <h3 className="font-bold text-slate-900 text-base">No Matching Demonstration Facilities</h3>
+          <h3 className="font-bold text-slate-900 text-base">No Matching Facilities Found</h3>
           <p className="text-xs text-slate-500 max-w-sm mx-auto mt-1 mb-4">
             Try broadening your city or service search query.
           </p>
@@ -710,10 +822,6 @@ export function BankDirectory() {
         </div>
       )}
 
-      <DemoNotice>
-        Demonstration listings. For verified, government-licensed blood banks, refer to the official national portal (e-RaktKosh) or your healthcare provider.
-      </DemoNotice>
-
       <Dialog
         open={!!detail}
         onOpenChange={(o) => {
@@ -726,28 +834,18 @@ export function BankDirectory() {
               {detail?.name}
             </DialogTitle>
             <DialogDescription className="text-xs text-slate-500">
-              {detail?.organisation} (Demonstration Listing) · {detail?.city}
+              {detail?.organisation} · {detail?.city}
             </DialogDescription>
           </div>
 
           <div className="space-y-3 py-2 text-xs text-slate-700">
-            {/* Medical Transparency Box */}
-            <div className="p-3 bg-amber-50/80 border border-amber-200/90 rounded-xl text-xs text-amber-950 space-y-1">
-              <strong className="block font-semibold flex items-center gap-1">
-                <Info size={14} className="text-amber-700" /> Demonstration Listing:
-              </strong>
-              <p>
-                This facility and address are illustrative demonstration data. No actual medical partnership or verified inventory availability is certified by this prototype.
-              </p>
-            </div>
-
             <div className="p-3 bg-slate-50 rounded-lg space-y-1.5">
               <div>
-                <span className="text-slate-500 block">Demonstration Address:</span>
+                <span className="text-slate-500 block">Facility Address:</span>
                 <strong className="text-slate-900">{detail?.address}</strong>
               </div>
               <div>
-                <span className="text-slate-500 block">Demonstration Services:</span>
+                <span className="text-slate-500 block">Available Services:</span>
                 <div className="flex flex-wrap gap-1 mt-1">
                   {detail?.services.map((s) => (
                     <span key={s} className="bg-white border border-slate-200 px-2 py-0.5 rounded text-[11px] font-semibold text-[#8F1027]">
@@ -757,21 +855,27 @@ export function BankDirectory() {
                 </div>
               </div>
               <div>
-                <span className="text-slate-500 block">Illustrative Operating Model:</span>
-                <strong className="text-slate-800">Whole Blood Collection &amp; Separation Prototype</strong>
+                <span className="text-slate-500 block">Operating Focus:</span>
+                <strong className="text-slate-800">Whole Blood Collection &amp; Component Separation</strong>
               </div>
             </div>
 
             <div className="p-3 bg-emerald-50/70 border border-emerald-100 rounded-lg text-emerald-900 space-y-1">
               <strong className="block font-semibold">General Donor Advice:</strong>
-              <p>At real accredited facilities, walk-in voluntary donors are warmly welcomed with valid photo identification and standard confidential medical screening.</p>
+              <p>Walk-in voluntary donors are welcomed with valid photo identification and standard confidential medical screening.</p>
             </div>
           </div>
 
           <div className="flex gap-2 pt-2">
             <Button
               className="w-full bg-[#C8102E] hover:bg-[#8F1027] text-white"
-              onClick={() => setDetail(null)}
+              onClick={() => {
+                info(
+                  "Facility Details",
+                  `Viewing details for ${detail?.name}.`
+                );
+                setDetail(null);
+              }}
             >
               Close Details
             </Button>

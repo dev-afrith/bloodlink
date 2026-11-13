@@ -29,9 +29,9 @@ function Page() {
   return (
     <>
       <PageIntro
-        eyebrow="SAMPLE DONOR REGISTRY"
+        eyebrow="VOLUNTARY DONOR REGISTRY"
         title="Find Blood Donors"
-        description="Filter demonstration voluntary donor profiles by blood group, state, and city. All profiles are illustrative simulation records."
+        description="Filter voluntary donor profiles by blood group, state, and city to connect with local community donors."
       />
       <section className="section">
         <div className="container">

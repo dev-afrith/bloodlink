@@ -28,7 +28,7 @@ function Page() {
       <PageIntro
         eyebrow="VOLUNTARY DONOR REGISTRATION"
         title="Become a Voluntary Donor"
-        description="Join our voluntary donor community demonstration. Express your willingness to donate and understand the donation process."
+        description="Join our voluntary donor community. Register to support local hospitals and patients in clinical need."
       />
       <section className="section">
         <div className="container">

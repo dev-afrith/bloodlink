@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { PageIntro, FinalCTA, DemoNotice } from "./shared";
 import { HowSteps, Awareness } from "./home";
+import { DonationProcessInfographic, DonationImpactChart } from "./charts";
 import campaign from "@/assets/donor-campaign.jpg";
 
 export function AboutPage() {
@@ -20,31 +21,41 @@ export function AboutPage() {
             width={1024}
             height={1024}
             loading="lazy"
-            className="rounded-2xl shadow-md border border-slate-200"
+            className="rounded-2xl shadow-xl border border-slate-200/80 object-cover"
           />
-          <div className="space-y-4">
-            <span className="eyebrow">EVERY DROP CONNECTS A LIFE.</span>
-            <h2 className="text-3xl font-display font-extrabold text-slate-900 leading-tight">
+          <div className="space-y-5">
+            <span className="eyebrow text-[#C8102E] font-bold tracking-widest">
+              <span className="bg-[#C8102E]" />
+              EVERY DROP CONNECTS A LIFE
+            </span>
+            <h2 className="text-3xl md:text-4xl font-display font-extrabold text-slate-950 leading-[1.18] tracking-tight">
               Built on kindness.
               <br />
-              Connected by purpose.
+              <span className="text-[#C8102E]">Connected by purpose.</span>
             </h2>
-            <p className="text-sm text-slate-600 leading-relaxed">
+            <p className="text-sm md:text-base text-slate-600 leading-relaxed">
               We believe discovering blood donation information should feel accessible,
               compassionate, and immediate. BloodLink unifies voluntary donor discovery, accredited blood bank networks, and community emergency requests into one seamless digital experience.
             </p>
-            <p className="text-sm text-slate-600 leading-relaxed">
+            <p className="text-sm md:text-base text-slate-600 leading-relaxed">
               Our platform adheres to World Health Organization (WHO) voluntary blood donation standards and promotes voluntary, unpaid donation as the safest and most sustainable foundation for healthcare.
             </p>
             <div className="pt-2">
-              <Button asChild className="bg-[#C8102E] hover:bg-[#8F1027] text-white font-semibold">
+              <Button asChild className="bg-gradient-to-r from-[#C8102E] to-[#8F1027] hover:from-[#A60D25] hover:to-[#730D20] text-white font-semibold rounded-xl h-11 px-5 shadow-md">
                 <Link to="/become-a-donor">Explore Voluntary Donor Registration</Link>
               </Button>
             </div>
-            <DemoNotice />
           </div>
         </div>
       </section>
+
+      {/* About Page Impact Metrics Chart */}
+      <section className="section bg-slate-50 border-t border-slate-200/80">
+        <div className="container max-w-4xl">
+          <DonationImpactChart />
+        </div>
+      </section>
+
       <FinalCTA />
     </>
   );
@@ -61,10 +72,21 @@ export function HowPage() {
       <section className="section section-white">
         <div className="container">
           <HowSteps />
-          <div className="mt-8">
-            <DemoNotice>
-              BloodLink provides voluntary donor discovery and awareness. All clinical compatibility testing and transfusion coordination are carried out by licensed healthcare providers.
-            </DemoNotice>
+
+          <div className="mt-16">
+            <div className="text-center max-w-2xl mx-auto mb-8">
+              <span className="eyebrow text-[#C8102E] font-bold tracking-widest justify-center">
+                <span className="bg-[#C8102E]" />
+                DONATION DAY JOURNEY
+              </span>
+              <h2 className="text-2xl md:text-3xl font-display font-extrabold text-slate-950 mt-2">
+                What to Expect at the Donation Center
+              </h2>
+              <p className="text-xs md:text-sm text-slate-600 mt-2">
+                Every voluntary donation takes less than 45 minutes from arrival to refreshment.
+              </p>
+            </div>
+            <DonationProcessInfographic />
           </div>
         </div>
       </section>
@@ -143,7 +165,7 @@ export const infoContent: Record<
       },
       {
         title: "Secure Infrastructure",
-        text: "The platform runs on modern secure infrastructure with encrypted transmission. Demonstration data is ephemeral and does not expose real medical records.",
+        text: "The platform runs on modern secure infrastructure with encrypted transmission. All participant records are safeguarded and comply with healthcare data privacy practices.",
       },
     ],
   },
@@ -193,19 +215,39 @@ export const infoContent: Record<
   eligibility: {
     eyebrow: "DONOR HEALTH CRITERIA",
     title: "Who Can Donate Blood?",
-    description: "Key parameters that determine voluntary donation safety.",
+    description: "Detailed parameters that determine voluntary donation safety. Eligibility criteria protect both the generous donor and the vulnerable recipient.",
     sections: [
       {
-        title: "General Eligibility Parameters",
-        text: "Age between 18 and 65 years, weight at least 45 kg, hemoglobin level of 12.5 g/dL or higher, normal blood pressure and pulse, and general wellness on the day of donation.",
+        title: "1. General Age & Weight Requirements",
+        text: "Donors must generally be between 18 and 65 years of age. First-time donors are typically accepted up to age 60. Donors must weigh at least 45 kg (50 kg for apheresis or 450 mL whole blood collection) to ensure fluid balance is safely maintained.",
       },
       {
-        title: "Temporary Deferral Conditions",
-        text: "Recent minor illness, fever, dental extraction, antibiotic therapy, recent tattooing (within 6 months), or travel to certain endemic regions may require temporary deferral.",
+        title: "2. Haemoglobin & Vital Signs Screening",
+        text: "On donation day, a rapid drop of blood is tested for haemoglobin concentration, which must be at least 12.5 g/dL (both for males and females). Pulse must be regular between 50–100 bpm, and blood pressure must fall within safe physiological parameters (systolic 100–140 mmHg, diastolic 60–90 mmHg).",
       },
       {
-        title: "Individual Medical Review",
-        text: "A qualified doctor at the donation center will review your health profile to ensure donation is completely safe for both you and the recipient.",
+        title: "3. General Health & Wellness",
+        text: "You must feel in good health, well-rested, and free from active infection or unexplained acute symptoms. Donors should have eaten a balanced meal within 2 to 3 hours and hydrated adequately before visiting the clinical center.",
+      },
+      {
+        title: "4. Temporary Reasons to Postpone (Deferral)",
+        text: "Donation is temporarily postponed for recent colds, fever, or antibiotic treatments (defer until 7–14 days post-recovery); dental extractions or minor oral surgeries (defer 72 hours); recent body piercing or tattooing (defer 6 months); pregnancy and lactation (defer until 6–12 months postpartum); and recent international travel to specific malaria-endemic regions.",
+      },
+      {
+        title: "5. Conditions Requiring Medical Assessment",
+        text: "Certain medical conditions—such as managed hypertension, well-controlled thyroid conditions, or past surgical procedures—require evaluation by the on-site donation medical officer. Certain chronic conditions (e.g., active cardiac disease, severe asthma, chronic kidney disease, or blood-borne infections) represent permanent deferrals for donor safety.",
+      },
+      {
+        title: "6. Pre-Donation Preparation",
+        text: "Get a full night of restful sleep (7–8 hours). Drink 500 mL of water or oral fluids before arriving. Eat a healthy, low-fat meal 2–3 hours beforehand. Avoid alcohol consumption for at least 24 hours and refrain from smoking for at least 2 hours prior to donation.",
+      },
+      {
+        title: "7. After-Donation Care & Recovery",
+        text: "Rest in the observation lounge for 10–15 minutes post-donation while enjoying complimentary refreshments. Keep the bandage on your venepuncture site for 4 hours. Stay well-hydrated throughout the day and avoid strenuous physical exertion or heavy lifting for the rest of the day.",
+      },
+      {
+        title: "8. Location & Policy Disclaimer",
+        text: "Important: Clinical eligibility guidelines vary by country, state, donation type (whole blood vs. platelets), and individual blood center protocols. The final decision on donor suitability rests solely with the qualified medical staff at the collection center.",
       },
     ],
   },

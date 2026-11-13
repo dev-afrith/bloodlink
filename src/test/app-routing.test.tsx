@@ -14,4 +14,20 @@ describe("App routing", () => {
 
     expect(matches.at(-1)?.routeId).not.toBe(rootRouteId);
   });
+
+  it("matches dedicated route for /request-blood", () => {
+    const router = createRouter({ routeTree, context: { queryClient: new QueryClient() } });
+
+    const matches = router.matchRoutes("/request-blood");
+
+    expect(matches.at(-1)?.routeId).not.toBe(rootRouteId);
+    expect(matches.at(-1)?.routeId).toContain("/request-blood");
+  });
+
+  it("matches dedicated routes for /requests and /become-a-donor", () => {
+    const router = createRouter({ routeTree, context: { queryClient: new QueryClient() } });
+
+    expect(router.matchRoutes("/requests").at(-1)?.routeId).not.toBe(rootRouteId);
+    expect(router.matchRoutes("/become-a-donor").at(-1)?.routeId).not.toBe(rootRouteId);
+  });
 });

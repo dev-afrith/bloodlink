@@ -28,7 +28,7 @@ function Page() {
       <PageIntro
         eyebrow="FACILITY DIRECTORY"
         title="Blood Bank Directory"
-        description="Explore demonstration blood bank listings, component separation capabilities, and clinical storage centers."
+        description="Explore licensed blood bank listings, component separation capabilities, and cold-chain storage facilities across India."
       />
       <section className="section">
         <div className="container">

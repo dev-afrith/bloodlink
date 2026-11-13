@@ -26,9 +26,9 @@ function Page() {
   return (
     <>
       <PageIntro
-        eyebrow="DEMONSTRATION SCENARIOS"
+        eyebrow="EMERGENCY REQUIREMENTS"
         title="Emergency Blood Requests"
-        description="Explore demonstration blood component requirements showing how healthcare facilities broadcast urgent patient needs."
+        description="Explore immediate blood component requirements broadcast by hospitals, trauma centers, and healthcare facilities."
       />
       <section className="section">
         <div className="container">

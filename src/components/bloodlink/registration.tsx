@@ -17,6 +17,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { bloodGroups, locations } from "@/data/demo";
 import campaign from "@/assets/donor-campaign.jpg";
+import { useToast } from "@/components/ui/toast-notification";
 import { DemoNotice } from "./shared";
 
 export const registrationSchema = z
@@ -40,6 +41,7 @@ type Registration = z.infer<typeof registrationSchema>;
 export function RegistrationForm() {
   const [submission, setSubmission] = useState<Registration | null>(null);
   const [busy, setBusy] = useState(false);
+  const { success } = useToast();
 
   const {
     register,
@@ -60,12 +62,16 @@ export function RegistrationForm() {
     setTimeout(() => {
       setSubmission(data);
       setBusy(false);
+      success(
+        "Registration Confirmed",
+        `Thank you ${data.name}! You are registered as an active ${data.group} donor.`
+      );
     }, 450);
   };
 
   return (
     <div className="registration-layout">
-      <div className="registration-visual">
+      <div className="registration-visual shadow-xl">
         <img
           src={campaign}
           loading="lazy"
@@ -74,18 +80,18 @@ export function RegistrationForm() {
           alt="A smiling healthcare professional assisting a voluntary donor at a bright clinic"
         />
         <div className="registration-message">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-white text-xs font-semibold mb-3 border border-white/20">
-            <Heart size={14} className="fill-white text-white" /> Voluntary Impact Network
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-white text-xs font-semibold mb-3 border border-white/20 shadow-sm">
+            <Heart size={14} className="fill-white text-white animate-pulse" /> Voluntary Impact Network
           </div>
-          <h3 className="font-display">
+          <h3 className="font-display font-extrabold text-3xl md:text-4xl text-white tracking-tight leading-tight">
             A little of you.
             <br />A lot of hope.
           </h3>
-          <p className="text-white/90 text-sm max-w-sm">
+          <p className="text-white/90 text-sm max-w-sm mt-2 leading-relaxed">
             Join thousands of voluntary donors who show up when someone needs a miracle.
           </p>
 
-          <div className="mt-5 pt-4 border-t border-white/20 grid grid-cols-2 gap-3 text-xs text-white/90">
+          <div className="mt-5 pt-4 border-t border-white/20 grid grid-cols-2 gap-3 text-xs text-white/95 font-medium">
             <div className="flex items-center gap-2">
               <Clock size={16} className="text-rose-200" />
               <span>15 min donation</span>
@@ -106,7 +112,7 @@ export function RegistrationForm() {
         </div>
       </div>
 
-      <div className="registration-form bg-white p-7 md:p-9 rounded-2xl border border-slate-200 shadow-sm">
+      <div className="registration-form bg-white p-7 md:p-10 rounded-2xl border border-slate-200/90 shadow-xl">
         {submission ? (
           <div className="registration-success space-y-4" role="status">
             <div className="w-14 h-14 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 mb-2">
@@ -120,7 +126,7 @@ export function RegistrationForm() {
               Thank You, {submission.name.split(" ")[0]}!
             </h2>
             <p className="text-sm text-slate-600 leading-relaxed">
-              Your voluntary commitment as a <strong>{submission.group}</strong> donor has been registered in the demonstration database. You are helping build a safer, more connected healthcare community.
+              Your voluntary commitment as a <strong>{submission.group}</strong> donor has been registered in our community database. You are helping build a safer, more connected healthcare community.
             </p>
 
             <div className="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-2 text-xs w-full">
@@ -165,16 +171,9 @@ export function RegistrationForm() {
               <br />
               Someone’s Second Chance.
             </h2>
-            <p className="text-sm text-slate-600 mb-3 leading-relaxed">
+            <p className="text-sm text-slate-600 mb-6 leading-relaxed">
               Express your willingness to donate blood voluntarily. All registrations are handled with confidential care.
             </p>
-
-            <div className="p-3 bg-amber-50/80 border border-amber-200/90 rounded-xl text-xs text-amber-950 mb-5 flex items-start gap-2">
-              <ShieldCheck size={16} className="text-amber-700 shrink-0 mt-0.5" />
-              <span>
-                <strong>Demonstration Form:</strong> Submissions are stored temporarily in browser memory only and disappear upon reload. No real account is created and no medical eligibility is certified. Please use fictional details.
-              </span>
-            </div>
 
             <form onSubmit={handleSubmit(submit)} noValidate className="space-y-4">
               <div className="form-grid">
@@ -305,10 +304,6 @@ export function RegistrationForm() {
             </form>
           </>
         )}
-
-        <DemoNotice>
-          Prototype demonstration. Clinical assessment and compatibility are conducted by certified medical personnel.
-        </DemoNotice>
       </div>
     </div>
   );
