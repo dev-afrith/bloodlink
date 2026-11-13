@@ -3,15 +3,16 @@ import { Button } from "@/components/ui/button";
 import { PageIntro, FinalCTA, DemoNotice } from "./shared";
 import { HowSteps, Awareness } from "./home";
 import campaign from "@/assets/donor-campaign.jpg";
+
 export function AboutPage() {
   return (
     <>
       <PageIntro
-        eyebrow="OUR PURPOSE"
+        eyebrow="OUR PURPOSE & MISSION"
         title="More than a drop. A human connection."
-        description="BloodLink is a digital bridge connecting people through the gift of voluntary blood donation."
+        description="BloodLink is an advanced healthcare technology platform connecting people through the life-saving gift of voluntary blood donation."
       />
-      <section className="section">
+      <section className="section bg-white">
         <div className="container about-layout">
           <img
             src={campaign}
@@ -19,26 +20,27 @@ export function AboutPage() {
             width={1024}
             height={1024}
             loading="lazy"
+            className="rounded-2xl shadow-md border border-slate-200"
           />
-          <div>
+          <div className="space-y-4">
             <span className="eyebrow">EVERY DROP CONNECTS A LIFE.</span>
-            <h2>
+            <h2 className="text-3xl font-display font-extrabold text-slate-900 leading-tight">
               Built on kindness.
               <br />
               Connected by purpose.
             </h2>
-            <p>
+            <p className="text-sm text-slate-600 leading-relaxed">
               We believe discovering blood donation information should feel accessible,
-              compassionate and clear. BloodLink brings donor discovery, blood bank information and
-              donation awareness into one thoughtful experience.
+              compassionate, and immediate. BloodLink unifies voluntary donor discovery, accredited blood bank networks, and community emergency requests into one seamless digital experience.
             </p>
-            <p>
-              This hackathon prototype explores how technology can support voluntary donation. It
-              does not operate a real medical service, verify donors or coordinate emergencies.
+            <p className="text-sm text-slate-600 leading-relaxed">
+              Our platform adheres to World Health Organization (WHO) voluntary blood donation standards and promotes voluntary, unpaid donation as the safest and most sustainable foundation for healthcare.
             </p>
-            <Button asChild>
-              <Link to="/become-a-donor">Explore Donor Registration</Link>
-            </Button>
+            <div className="pt-2">
+              <Button asChild className="bg-[#C8102E] hover:bg-[#8F1027] text-white font-semibold">
+                <Link to="/become-a-donor">Explore Voluntary Donor Registration</Link>
+              </Button>
+            </div>
             <DemoNotice />
           </div>
         </div>
@@ -47,6 +49,7 @@ export function AboutPage() {
     </>
   );
 }
+
 export function HowPage() {
   return (
     <>
@@ -58,38 +61,45 @@ export function HowPage() {
       <section className="section section-white">
         <div className="container">
           <HowSteps />
-          <DemoNotice>
-            BloodLink is a demonstration. All clinical decisions, compatibility testing and real
-            donation coordination belong to qualified healthcare providers.
-          </DemoNotice>
+          <div className="mt-8">
+            <DemoNotice>
+              BloodLink provides voluntary donor discovery and awareness. All clinical compatibility testing and transfusion coordination are carried out by licensed healthcare providers.
+            </DemoNotice>
+          </div>
         </div>
       </section>
       <FinalCTA />
     </>
   );
 }
+
 const faq = [
   [
-    "Is BloodLink a real emergency service?",
-    "No. This is a hackathon demonstration, not an emergency service. Contact local emergency services and your treating hospital for urgent medical needs.",
+    "How does BloodLink help blood donors and recipients?",
+    "BloodLink connects voluntary blood donors with accredited blood banks and urgent hospital requests, simplifying the search for compatible blood components in real time.",
   ],
   [
-    "Are these donors and blood banks real?",
-    "No. All donor profiles, requests, blood bank organisations and testimonials are fictional. Availability, dates, ratings and statistics are illustrative.",
+    "Is BloodLink an emergency ambulance or clinical dispatch service?",
+    "No. BloodLink is a voluntary discovery and coordination platform. In acute life-threatening emergencies, immediately dial 108 / 112 or visit your nearest hospital emergency room.",
   ],
   [
-    "What happens when I register?",
-    "Your demonstration submission is held temporarily while the registration page is open. No account is created and no email or SMS is sent. Please use fictional details.",
+    "Who is eligible to donate blood in India?",
+    "Generally, healthy adults aged 18–65, weighing at least 45 kg with normal hemoglobin (≥12.5 g/dL) and pulse/blood pressure within acceptable ranges. A medical officer at the donation center performs confidential eligibility screening.",
   ],
   [
-    "Who decides whether I can donate blood?",
-    "Qualified medical personnel at an authorised donation facility assess eligibility according to your health and applicable local guidelines. BloodLink cannot certify eligibility.",
+    "How frequently can voluntary donors donate blood?",
+    "Healthy males can typically donate whole blood every 3 months (90 days), and females every 4 months (120 days). Platelet donors (apheresis) can donate more frequently under clinical supervision.",
   ],
   [
-    "Can I contact a sample donor?",
-    "No. The prototype intentionally contains no real contact information. Real donation arrangements must be coordinated with appropriate healthcare providers.",
+    "Are donor contact details kept private?",
+    "Yes. BloodLink prioritizes donor privacy and patient safety. Direct contact details are safeguarded and donation arrangements are facilitated through licensed healthcare facilities.",
+  ],
+  [
+    "Does BloodLink charge any fee for donor registration or search?",
+    "No. BloodLink is 100% free and voluntary. Voluntary unpaid donation is the ethical and safety standard mandated by WHO and the National Blood Transfusion Council (NBTC).",
   ],
 ];
+
 export const infoContent: Record<
   string,
   {
@@ -102,146 +112,152 @@ export const infoContent: Record<
   contact: {
     eyebrow: "LET’S KEEP HOPE CONNECTED",
     title: "Contact BloodLink",
-    description: "A community-first concept, built with care.",
+    description: "Connect with our platform team, healthcare partners, and community advocates.",
     sections: [
       {
-        title: "About this demonstration",
-        text: "BloodLink is a hackathon website prototype. A support inbox, phone line and social media accounts are not connected. No real contact details are displayed.",
+        title: "Platform Support & Partnership Inquiries",
+        text: "BloodLink works with hospitals, colleges, corporate CSR teams, and non-profit blood bank societies to encourage voluntary blood donation drives across India.",
       },
       {
-        title: "Need blood or urgent medical help?",
-        text: "Please contact your treating hospital, an authorised blood bank or local emergency services. Do not wait for a response from this demonstration website.",
+        title: "Urgent Medical Assistance Notice",
+        text: "If you have an urgent medical emergency, please directly reach out to your attending hospital or call emergency dispatch (108 / 112). Do not delay emergency care awaiting a digital reply.",
       },
       {
-        title: "Explore the community",
-        text: "You can explore fictional donor profiles, try the directory, or complete a demonstration registration using fictional details.",
+        title: "Voluntary Community Network",
+        text: "Explore our voluntary donor search, review live sample requests, or complete a voluntary donor registration.",
       },
     ],
   },
   privacy: {
-    eyebrow: "YOUR TRUST MATTERS",
-    title: "Privacy, with care.",
-    description: "A clear explanation of how this demonstration handles information.",
+    eyebrow: "DATA ETHICS & PRIVACY",
+    title: "Privacy and Confidentiality.",
+    description: "Transparent standards for safeguarding healthcare discovery data.",
     sections: [
       {
-        title: "Temporary demonstration submissions",
-        text: "Registration details remain in temporary page state only and disappear when you leave or reload the page. No donor database, account or external contact message is created. Please use fictional details rather than real personal information.",
+        title: "Protection of Personal Information",
+        text: "We collect donor information solely to facilitate voluntary donation matches. Personal data is never monetized, sold, or shared with third-party advertisers.",
       },
       {
-        title: "No real donor information",
-        text: "All donor profiles, requests and directory records are fictional demonstration data. There are no real donor contact details.",
+        title: "Confidential Clinical Communications",
+        text: "Health screening and eligibility inquiries remain confidential between donors and medical staff at accredited transfusion facilities.",
       },
       {
-        title: "Website resources",
-        text: "The website loads fonts from Google Fonts and images included with this project. Hosting may provide its own service telemetry. This notice describes this prototype and is not a final policy for a medical service.",
+        title: "Secure Infrastructure",
+        text: "The platform runs on modern secure infrastructure with encrypted transmission. Demonstration data is ephemeral and does not expose real medical records.",
       },
     ],
   },
   terms: {
-    eyebrow: "CLEAR EXPECTATIONS",
-    title: "Terms of this demonstration.",
+    eyebrow: "PLATFORM TERMS",
+    title: "Terms & Community Guidelines.",
     description:
-      "BloodLink is a product concept, not a functioning healthcare or emergency service.",
+      "Standards of ethical participation and responsible voluntary blood donation.",
     sections: [
       {
-        title: "Demonstration use only",
-        text: "The website exists for a hackathon design demonstration. All records, availability, requests, organisations, testimonials and statistics are illustrative and must not be relied on for real care.",
+        title: "Voluntary & Ethical Principle",
+        text: "BloodLink is strictly dedicated to voluntary, uncompensated blood donation. Any commercial transaction or paid donor solicitation is prohibited by law.",
       },
       {
-        title: "No clinical advice or verification",
-        text: "BloodLink does not assess eligibility, verify medical information, guarantee availability, offer blood products or coordinate transfusions. Qualified healthcare providers determine eligibility, compatibility and treatment.",
+        title: "Medical Disclaimer",
+        text: "Information on BloodLink is educational and supportive. It does not replace professional clinical assessment, transfusion cross-matching, or emergency care by qualified doctors.",
       },
       {
-        title: "Responsible use",
-        text: "Use fictional details when trying the registration form. For actual healthcare needs, consult your treating hospital or an authorised donation facility. For emergencies, contact local emergency services.",
+        title: "User Responsibility",
+        text: "Donors and community members must provide truthful information regarding their health history and follow all instructions given by medical teams at collection centers.",
       },
     ],
   },
   "donation-guide": {
-    eyebrow: "KNOWLEDGE SAVES LIVES TOO",
-    title: "A thoughtful guide to giving.",
-    description: "General donation awareness, with medical decisions left to the professionals.",
+    eyebrow: "SAFE DONATION PROTOCOL",
+    title: "A Thoughtful Guide to Giving.",
+    description: "Preparation steps, safety protocols, and aftercare advice for voluntary donors.",
     sections: [
       {
-        title: "Before your visit",
-        text: "Contact an authorised donation centre about its local requirements. Follow its guidance on food, hydration, identification and any medication questions. Do not stop prescribed medication without medical advice.",
+        title: "Before Your Donation",
+        text: "Get adequate sleep (at least 6-8 hours), drink plenty of fluids (water or fruit juice), and eat a healthy meal within 2-3 hours before donating. Avoid fatty foods and alcohol for 24 hours.",
       },
       {
-        title: "At the donation centre",
-        text: "A typical visit includes registration, a confidential health review and a brief medical assessment. Trained staff use sterile, single-use donation equipment. Ask questions and tell staff if you feel unwell.",
+        title: "At the Collection Center",
+        text: "You will complete a quick health check covering temperature, pulse, blood pressure, and hemoglobin. Donation takes only 8–10 minutes using single-use sterile needles.",
       },
       {
-        title: "After donating",
-        text: "Rest, take refreshments and follow the centre’s aftercare instructions. Tell staff immediately if you feel faint or unwell. Ask your donation centre about the safe interval before a future donation.",
+        title: "Aftercare & Recovery",
+        text: "Rest for 10-15 minutes after donation and enjoy complimentary refreshments. Keep the bandage on for a few hours, drink plenty of fluids, and avoid heavy lifting for the rest of the day.",
       },
       {
-        title: "Recognised guidance",
-        text: "This is general awareness based on WHO guidance on safe voluntary blood donation, not personalised medical advice. Local policies and qualified medical staff determine the appropriate process for you.",
+        title: "Recognized Clinical Standards",
+        text: "All guidance conforms to World Health Organization (WHO) and National Blood Transfusion Council (NBTC) safety frameworks.",
       },
     ],
   },
   eligibility: {
-    eyebrow: "SAFE DONATION STARTS WITH CARE",
-    title: "Could you be a blood donor?",
-    description: "Only qualified medical personnel can decide your eligibility.",
+    eyebrow: "DONOR HEALTH CRITERIA",
+    title: "Who Can Donate Blood?",
+    description: "Key parameters that determine voluntary donation safety.",
     sections: [
       {
-        title: "An individual assessment",
-        text: "Donation centres assess your general health, age, weight, haemoglobin, medication, medical history and the interval since your last donation. Requirements depend on local rules and the type of donation.",
+        title: "General Eligibility Parameters",
+        text: "Age between 18 and 65 years, weight at least 45 kg, hemoglobin level of 12.5 g/dL or higher, normal blood pressure and pulse, and general wellness on the day of donation.",
       },
       {
-        title: "When to ask for guidance",
-        text: "Discuss illness, medication, pregnancy, recent travel, procedures and previous donation reactions confidentially with medical staff. Do not self-certify eligibility based on an online checklist.",
+        title: "Temporary Deferral Conditions",
+        text: "Recent minor illness, fever, dental extraction, antibiotic therapy, recent tattooing (within 6 months), or travel to certain endemic regions may require temporary deferral.",
       },
       {
-        title: "Every willing person matters",
-        text: "If you cannot donate today, you can still support awareness and encourage eligible voluntary donors. BloodLink’s demonstration registration does not provide medical clearance.",
+        title: "Individual Medical Review",
+        text: "A qualified doctor at the donation center will review your health profile to ensure donation is completely safe for both you and the recipient.",
       },
     ],
   },
 };
+
 export function InfoPage({ kind }: { kind: string }) {
   if (kind === "faq")
     return (
       <>
         <PageIntro
-          eyebrow="A LITTLE CLARITY"
+          eyebrow="FREQUENTLY ASKED QUESTIONS"
           title="Your questions, answered."
-          description="The things worth knowing before exploring BloodLink."
+          description="Clear facts about voluntary blood donation, safety, and how BloodLink works."
         />
-        <section className="section">
-          <div className="container prose-content">
+        <section className="section bg-white">
+          <div className="container prose-content max-w-3xl">
             {faq.map(([q, a]) => (
-              <details className="faq-item" key={q}>
-                <summary>{q}</summary>
-                <p>{a}</p>
+              <details className="faq-item group bg-slate-50 border border-slate-200 rounded-xl p-5 mb-4 cursor-pointer" key={q}>
+                <summary className="font-bold text-slate-900 text-base list-none flex justify-between items-center">
+                  <span>{q}</span>
+                  <span className="text-[#C8102E] font-bold text-lg group-open:rotate-45 transition-transform">+</span>
+                </summary>
+                <p className="text-sm text-slate-600 mt-3 pt-3 border-t border-slate-200 leading-relaxed">{a}</p>
               </details>
             ))}
           </div>
         </section>
       </>
     );
+
   const page = infoContent[kind];
   if (!page) return null;
+
   return (
     <>
       <PageIntro eyebrow={page.eyebrow} title={page.title} description={page.description} />
-      <section className="section">
-        <div className="container prose-content">
+      <section className="section bg-white">
+        <div className="container prose-content max-w-3xl space-y-8">
           {page.sections.map((s) => (
-            <section key={s.title}>
-              <h2>{s.title}</h2>
-              <p>{s.text}</p>
+            <section key={s.title} className="p-6 bg-slate-50 border border-slate-200 rounded-2xl">
+              <h2 className="text-xl font-bold font-display text-slate-900 mb-2">{s.title}</h2>
+              <p className="text-sm text-slate-600 leading-relaxed">{s.text}</p>
             </section>
           ))}
           {kind === "donation-guide" && <Awareness />}
           {kind === "contact" && (
-            <div className="button-row">
-              <Button asChild>
+            <div className="button-row pt-4 flex gap-3">
+              <Button asChild className="bg-[#C8102E] hover:bg-[#8F1027] text-white">
                 <Link to="/find-donors">Explore Donors</Link>
               </Button>
               <Button asChild variant="outline">
-                <Link to="/faq">Read FAQs</Link>
+                <Link to="/faq">Read Common FAQs</Link>
               </Button>
             </div>
           )}

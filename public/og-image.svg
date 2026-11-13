@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0F172A"/>
+      <stop offset="50%" stop-color="#1E293B"/>
+      <stop offset="100%" stop-color="#0F172A"/>
+    </linearGradient>
+    <linearGradient id="crimson" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#C8102E"/>
+      <stop offset="100%" stop-color="#8F1027"/>
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="16" flood-color="#C8102E" flood-opacity="0.45"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <!-- Subtle grid lines -->
+  <g stroke="#334155" stroke-opacity="0.25" stroke-width="1">
+    <line x1="100" y1="0" x2="100" y2="630"/>
+    <line x1="300" y1="0" x2="300" y2="630"/>
+    <line x1="500" y1="0" x2="500" y2="630"/>
+    <line x1="700" y1="0" x2="700" y2="630"/>
+    <line x1="900" y1="0" x2="900" y2="630"/>
+    <line x1="1100" y1="0" x2="1100" y2="630"/>
+    <line x1="0" y1="100" x2="1200" y2="100"/>
+    <line x1="0" y1="250" x2="1200" y2="250"/>
+    <line x1="0" y1="400" x2="1200" y2="400"/>
+    <line x1="0" y1="550" x2="1200" y2="550"/>
+  </g>
+
+  <!-- Ambient Crimson Glow -->
+  <circle cx="950" cy="200" r="280" fill="#C8102E" fill-opacity="0.18" filter="blur(60px)"/>
+  <circle cx="150" cy="500" r="200" fill="#8F1027" fill-opacity="0.15" filter="blur(50px)"/>
+
+  <!-- Logo Mark -->
+  <g transform="translate(100, 110)">
+    <!-- Droplet -->
+    <path d="M48 6C42 21 15 48 15 66C15 81 29.7 90 48 90C66.3 90 81 81 81 66C81 48 54 21 48 6Z" fill="url(#crimson)" filter="url(#glow)"/>
+    <!-- Heart Link -->
+    <path d="M48 68L45.7 65.9C38.1 59 33 54.4 33 48.6C33 43.9 36.6 40.4 41.3 40.4C43.8 40.4 46.4 41.6 48 43.6C49.6 41.6 52.2 40.4 54.7 40.4C59.4 40.4 63 43.9 63 48.6C63 54.4 57.9 59 50.3 65.9L48 68Z" fill="#FFFFFF"/>
+    
+    <!-- Brand Text -->
+    <text x="105" y="65" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="52" font-weight="800" fill="#FFFFFF">Blood<tspan fill="#C8102E">Link</tspan></text>
+    <text x="108" y="90" font-family="'Inter', system-ui, sans-serif" font-size="14" font-weight="700" letter-spacing="3" fill="#94A3B8">EVERY DROP CONNECTS A LIFE</text>
+  </g>
+
+  <!-- Main Headline -->
+  <text x="100" y="275" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="56" font-weight="800" fill="#FFFFFF" line-height="1.15">
+    Every Drop Connects a Life.
+  </text>
+  <text x="100" y="340" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="44" font-weight="700" fill="#C8102E">
+    Voluntary Blood Donation Platform
+  </text>
+
+  <!-- Subtitle -->
+  <text x="100" y="405" font-family="'Inter', system-ui, sans-serif" font-size="22" font-weight="400" fill="#94A3B8">
+    Real-time discovery connecting voluntary blood donors, accredited blood banks,
+  </text>
+  <text x="100" y="438" font-family="'Inter', system-ui, sans-serif" font-size="22" font-weight="400" fill="#94A3B8">
+    and urgent hospital requirements across India.
+  </text>
+
+  <!-- Feature Badges -->
+  <g transform="translate(100, 500)">
+    <!-- Badge 1 -->
+    <rect x="0" y="0" width="220" height="48" rx="24" fill="#1E293B" stroke="#334155" stroke-width="1.5"/>
+    <circle cx="24" cy="24" r="6" fill="#C8102E"/>
+    <text x="40" y="30" font-family="'Inter', system-ui, sans-serif" font-size="14" font-weight="600" fill="#F8FAFC">Live Donor Filters</text>
+
+    <!-- Badge 2 -->
+    <rect x="240" y="0" width="250" height="48" rx="24" fill="#1E293B" stroke="#334155" stroke-width="1.5"/>
+    <circle cx="264" cy="24" r="6" fill="#16A34A"/>
+    <text x="280" y="30" font-family="'Inter', system-ui, sans-serif" font-size="14" font-weight="600" fill="#F8FAFC">100% Free &amp; Voluntary</text>
+
+    <!-- Badge 3 -->
+    <rect x="510" y="0" width="260" height="48" rx="24" fill="#1E293B" stroke="#334155" stroke-width="1.5"/>
+    <circle cx="534" cy="24" r="6" fill="#EA580C"/>
+    <text x="550" y="30" font-family="'Inter', system-ui, sans-serif" font-size="14" font-weight="600" fill="#F8FAFC">Accredited Blood Banks</text>
+  </g>
+</svg>
+

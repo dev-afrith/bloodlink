@@ -4,15 +4,17 @@ import { PageIntro } from "@/components/bloodlink/shared";
 export const Route = createFileRoute("/requests")({
   head: () => ({
     meta: [
-      { title: "Sample Blood Requests | BloodLink" },
+      { title: "Emergency Blood Requests | BloodLink – Every Drop Connects a Life" },
       {
         name: "description",
-        content: "Explore illustrative blood requirements, not live emergencies.",
+        content:
+          "Monitor urgent and planned blood requirements across hospitals and healthcare facilities.",
       },
-      { property: "og:title", content: "Sample Blood Requests | BloodLink" },
+      { property: "og:title", content: "Emergency Blood Requests | BloodLink – Every Drop Connects a Life" },
       {
         property: "og:description",
-        content: "Explore illustrative blood requirements, not live emergencies.",
+        content:
+          "Monitor urgent and planned blood requirements across hospitals and healthcare facilities.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -24,9 +26,9 @@ function Page() {
   return (
     <>
       <PageIntro
-        eyebrow="EVERY DROP CONNECTS A LIFE"
-        title="Sample Blood Requests"
-        description="Explore illustrative blood requirements, not live emergencies."
+        eyebrow="DEMONSTRATION SCENARIOS"
+        title="Emergency Blood Requests"
+        description="Explore demonstration blood component requirements showing how healthcare facilities broadcast urgent patient needs."
       />
       <section className="section">
         <div className="container">

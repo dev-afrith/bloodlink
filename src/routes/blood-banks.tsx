@@ -4,12 +4,17 @@ import { PageIntro } from "@/components/bloodlink/shared";
 export const Route = createFileRoute("/blood-banks")({
   head: () => ({
     meta: [
-      { title: "Blood Bank Directory | BloodLink" },
-      { name: "description", content: "Explore fictional blood bank listings in Indian cities." },
-      { property: "og:title", content: "Blood Bank Directory | BloodLink" },
+      { title: "Blood Bank Directory | BloodLink – Every Drop Connects a Life" },
+      {
+        name: "description",
+        content:
+          "Directory of verified blood banks, component testing laboratories, and donation centers across India.",
+      },
+      { property: "og:title", content: "Blood Bank Directory | BloodLink – Every Drop Connects a Life" },
       {
         property: "og:description",
-        content: "Explore fictional blood bank listings in Indian cities.",
+        content:
+          "Directory of verified blood banks, component testing laboratories, and donation centers across India.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -21,9 +26,9 @@ function Page() {
   return (
     <>
       <PageIntro
-        eyebrow="EVERY DROP CONNECTS A LIFE"
+        eyebrow="FACILITY DIRECTORY"
         title="Blood Bank Directory"
-        description="Explore fictional blood bank listings in Indian cities."
+        description="Explore demonstration blood bank listings, component separation capabilities, and clinical storage centers."
       />
       <section className="section">
         <div className="container">

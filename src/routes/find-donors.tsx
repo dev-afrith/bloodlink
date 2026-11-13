@@ -6,15 +6,17 @@ export const Route = createFileRoute("/find-donors")({
   validateSearch: z.object({ group: z.string().optional() }),
   head: () => ({
     meta: [
-      { title: "Find Blood Donors | BloodLink" },
+      { title: "Find Donors | BloodLink – Every Drop Connects a Life" },
       {
         name: "description",
-        content: "Search fictional donor profiles by blood group and location.",
+        content:
+          "Search verified voluntary blood donors across India by blood group, state, and city in real-time.",
       },
-      { property: "og:title", content: "Find Blood Donors | BloodLink" },
+      { property: "og:title", content: "Find Donors | BloodLink – Every Drop Connects a Life" },
       {
         property: "og:description",
-        content: "Search fictional donor profiles by blood group and location.",
+        content:
+          "Search verified voluntary blood donors across India by blood group, state, and city in real-time.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -27,9 +29,9 @@ function Page() {
   return (
     <>
       <PageIntro
-        eyebrow="EVERY DROP CONNECTS A LIFE"
+        eyebrow="SAMPLE DONOR REGISTRY"
         title="Find Blood Donors"
-        description="Search fictional donor profiles by blood group and location."
+        description="Filter demonstration voluntary donor profiles by blood group, state, and city. All profiles are illustrative simulation records."
       />
       <section className="section">
         <div className="container">

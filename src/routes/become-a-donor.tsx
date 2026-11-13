@@ -4,10 +4,18 @@ import { PageIntro } from "@/components/bloodlink/shared";
 export const Route = createFileRoute("/become-a-donor")({
   head: () => ({
     meta: [
-      { title: "Become a Voluntary Donor | BloodLink" },
-      { name: "description", content: "Try a temporary demonstration donor registration." },
-      { property: "og:title", content: "Become a Voluntary Donor | BloodLink" },
-      { property: "og:description", content: "Try a temporary demonstration donor registration." },
+      { title: "Become a Donor | BloodLink – Every Drop Connects a Life" },
+      {
+        name: "description",
+        content:
+          "Join BloodLink’s voluntary blood donor network. Connect with hospitals and patients in need with a single voluntary registration.",
+      },
+      { property: "og:title", content: "Become a Donor | BloodLink – Every Drop Connects a Life" },
+      {
+        property: "og:description",
+        content:
+          "Join BloodLink’s voluntary blood donor network. Connect with hospitals and patients in need with a single voluntary registration.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -18,9 +26,9 @@ function Page() {
   return (
     <>
       <PageIntro
-        eyebrow="EVERY DROP CONNECTS A LIFE"
+        eyebrow="VOLUNTARY DONOR REGISTRATION"
         title="Become a Voluntary Donor"
-        description="Try a temporary demonstration donor registration."
+        description="Join our voluntary donor community demonstration. Express your willingness to donate and understand the donation process."
       />
       <section className="section">
         <div className="container">

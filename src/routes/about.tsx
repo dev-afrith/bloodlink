@@ -4,10 +4,18 @@ import { PageIntro } from "@/components/bloodlink/shared";
 export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
-      { title: "About BloodLink | BloodLink" },
-      { name: "description", content: "The community-first purpose behind BloodLink." },
-      { property: "og:title", content: "About BloodLink | BloodLink" },
-      { property: "og:description", content: "The community-first purpose behind BloodLink." },
+      { title: "About Us | BloodLink – Every Drop Connects a Life" },
+      {
+        name: "description",
+        content:
+          "BloodLink is a mission-driven digital health platform bringing speed, accessibility, and transparency to voluntary blood donation.",
+      },
+      { property: "og:title", content: "About Us | BloodLink – Every Drop Connects a Life" },
+      {
+        property: "og:description",
+        content:
+          "BloodLink is a mission-driven digital health platform bringing speed, accessibility, and transparency to voluntary blood donation.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],

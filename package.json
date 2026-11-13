@@ -1,5 +1,7 @@
 {
-  "name": "tanstack_start_ts",
+  "name": "bloodlink",
+  "version": "1.0.0",
+  "description": "BloodLink – Every Drop Connects a Life. Premier healthcare technology platform for voluntary blood donation discovery.",
   "private": true,
   "sideEffects": false,
   "type": "module",

@@ -11,7 +11,7 @@ import {
 import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
-import { reportLovableError } from "../lib/lovable-error-reporting";
+import { reportError } from "../lib/error-reporting";
 import { Navbar, Footer } from "@/components/bloodlink/shared";
 import { MotionConfig } from "framer-motion";
 
@@ -41,7 +41,7 @@ function ErrorComponent({ error, reset }: ErrorComponentProps) {
   console.error(error);
   const router = useRouter();
   useEffect(() => {
-    reportLovableError(error, { boundary: "tanstack_root_error_component" });
+    reportError(error, { boundary: "tanstack_root_error_component" });
   }, [error]);
 
   return (
@@ -77,22 +77,33 @@ function ErrorComponent({ error, reset }: ErrorComponentProps) {
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
   head: () => ({
-    // Replace these placeholders with the app's name and description when first building the app.
-    // Each content route, / included, must still set its own head(). Never add og:image or
-    // twitter:image here: every page without its own would inherit the root's preview image.
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "BloodLink — Every Drop Connects a Life" },
-      { name: "description", content: "A community-first blood donation discovery prototype." },
+      { title: "BloodLink – Every Drop Connects a Life" },
+      {
+        name: "description",
+        content:
+          "BloodLink is a premier healthcare technology platform connecting voluntary blood donors, blood banks, and urgent patient requests in real-time.",
+      },
       { name: "author", content: "BloodLink" },
-      { property: "og:title", content: "BloodLink — Every Drop Connects a Life" },
+      { property: "og:title", content: "BloodLink – Every Drop Connects a Life" },
       {
         property: "og:description",
-        content: "A community-first blood donation discovery prototype.",
+        content:
+          "Connecting voluntary blood donors, hospitals, and communities in real-time. Fast, secure, and community-driven.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:site_name", content: "BloodLink" },
+      { property: "og:image", content: "/og-image.svg" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "BloodLink – Every Drop Connects a Life" },
+      {
+        name: "twitter:description",
+        content:
+          "Connecting voluntary blood donors, hospitals, and communities in real-time. Fast, secure, and community-driven.",
+      },
+      { name: "twitter:image", content: "/og-image.svg" },
     ],
     links: [
       {
