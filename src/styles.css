@@ -57,6 +57,14 @@
   --color-success: var(--success);
   --color-warning: var(--warning);
   --color-crimson-dark: var(--crimson-dark);
+  --color-critical: var(--critical);
+  --color-urgent: var(--urgent);
+  --color-planned: var(--planned);
+  --color-filled: var(--filled);
+  --color-surface-slate: var(--surface-slate);
+  --color-surface-rose: var(--surface-rose);
+  --color-surface-blue: var(--surface-blue);
+  --color-ink-slate: var(--ink-slate);
   --radius-sm: 6px;
   --radius-md: 10px;
   --radius-lg: 14px;
@@ -77,6 +85,14 @@
   --warning: #EA580C;
   --warning-soft: #FFEDD5;
   --crimson-dark: #8F1027;
+  --critical: #B42318;
+  --urgent: #B45309;
+  --planned: #0E7490;
+  --filled: #0E7A4E;
+  --surface-slate: #F8FAFC;
+  --surface-rose: #FFF1F2;
+  --surface-blue: #EFF6FF;
+  --ink-slate: #1E293B;
   --avatar-peach: #FFE4E6;
   --avatar-sage: #E0E7FF;
   --avatar-blue: #E0F2FE;
@@ -125,6 +141,9 @@
     font-size: 16px;
     line-height: 1.7;
     letter-spacing: 0;
+  }
+  p {
+    max-width: 68ch;
   }
   h1,
   h2,
@@ -511,13 +530,30 @@
   box-shadow: 0 1px 4px rgba(15, 23, 42, 0.04);
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.quick-card:hover,
-.donor-card:hover,
-.request-card:hover,
-.bank-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 16px 32px -4px rgba(200, 16, 46, 0.1), 0 6px 12px -2px rgba(15, 23, 42, 0.05);
-  border-color: rgba(200, 16, 46, 0.3);
+@media (hover: hover) {
+  .quick-card:hover,
+  .donor-card:hover,
+  .request-card:hover,
+  .bank-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 16px 32px -4px rgba(200, 16, 46, 0.1), 0 6px 12px -2px rgba(15, 23, 42, 0.05);
+    border-color: rgba(200, 16, 46, 0.3);
+  }
+  .group-card:hover {
+    border-color: var(--primary);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px -4px rgba(200, 16, 46, 0.12), 0 4px 8px -2px rgba(15, 23, 42, 0.04);
+  }
+  .story:hover {
+    border-color: rgba(200, 16, 46, 0.3);
+    transform: translateY(-3px);
+  }
+  .footer-grid > div > a:hover {
+    color: var(--card);
+  }
+  .faq-item:hover {
+    border-color: rgba(200, 16, 46, 0.3);
+  }
 }
 .quick-icon {
   height: 43px;
@@ -570,11 +606,6 @@
   box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   color: var(--foreground);
-}
-.group-card:hover {
-  border-color: var(--primary);
-  transform: translateY(-4px);
-  box-shadow: 0 12px 24px -4px rgba(200, 16, 46, 0.12), 0 4px 8px -2px rgba(15, 23, 42, 0.04);
 }
 .group-drop {
   display: grid;
@@ -1131,12 +1162,6 @@
   box-shadow: 0 4px 16px -2px rgba(15, 23, 42, 0.04);
   transition: all 0.25s ease;
 }
-.story:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 16px 32px -4px rgba(200, 16, 46, 0.08), 0 4px 12px -2px rgba(15, 23, 42, 0.04);
-  border-color: #CBD5E1;
-  border-left-color: var(--primary);
-}
 .stars {
   display: flex;
   gap: 3px;
@@ -1269,9 +1294,6 @@
   font-size: 13px;
   margin: 9px 0;
   transition: color 0.15s ease;
-}
-.footer-grid > div > a:hover {
-  color: #FFFFFF;
 }
 .footer-grid > div:last-child > a {
   display: inline-flex;
@@ -1440,10 +1462,6 @@
   box-shadow: 0 2px 8px -1px rgba(15, 23, 42, 0.03);
   margin-bottom: 16px;
   transition: all 0.2s ease;
-}
-.faq-item:hover {
-  border-color: #CBD5E1;
-  box-shadow: 0 8px 20px -2px rgba(15, 23, 42, 0.06);
 }
 .faq-item summary {
   font-family: var(--font-display);
@@ -1959,9 +1977,9 @@
   }
   .field input,
   .field select {
-    font-size: 10px;
+    font-size: 16px;
     padding: 0 9px;
-    height: 42px;
+    height: 44px;
   }
   .result-toolbar {
     flex-direction: column;
@@ -2216,6 +2234,39 @@
     display: none;
   }
 }
+
+@media (max-width: 640px) {
+  .search-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 16px;
+    background: var(--card);
+    border-radius: 16px;
+    border: 1px solid var(--border);
+  }
+  .search-panel > button {
+    min-height: 44px;
+    width: 100%;
+  }
+  .filter-chips button {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  .donor-card .donor-top {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .donor-card .blood-badge {
+    margin-left: auto;
+  }
+  .btn,
+  button,
+  .button,
+  .bl-button {
+    min-height: 44px;
+  }
+}
 @media (prefers-reduced-motion: reduce) {
   *,
   *:before,
@@ -2230,6 +2281,11 @@
   .request-card:hover,
   .bank-card:hover {
     transform: none;
+  }
+  .request-countdown-bar,
+  .request-countdown-bar * {
+    transition: none !important;
+    animation: none !important;
   }
 }
 

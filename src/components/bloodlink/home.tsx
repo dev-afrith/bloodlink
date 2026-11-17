@@ -180,7 +180,7 @@ export function ContactSection() {
             Emergency Medical Helpline
           </div>
           <p className="text-xs text-slate-600 leading-relaxed">
-            In acute medical emergencies, call national emergency ambulance dispatch at <strong className="text-slate-900">108 / 112</strong> or proceed directly to your nearest hospital emergency department.
+            In acute medical emergencies, call national emergency ambulance dispatch at <a href="tel:108" className="text-slate-900 font-bold underline">108</a> / <a href="tel:112" className="text-slate-900 font-bold underline">112</a> or proceed directly to your nearest hospital emergency department.
           </p>
         </div>
 
@@ -393,10 +393,10 @@ export function Home() {
 
             <div className="hero-proof mt-6 flex items-center gap-3">
               <div className="mini-avatars flex -space-x-2">
-                <span className="w-8 h-8 rounded-full bg-rose-100 border-2 border-white flex items-center justify-center text-xs font-bold text-[#8F1027]">AR</span>
-                <span className="w-8 h-8 rounded-full bg-amber-100 border-2 border-white flex items-center justify-center text-xs font-bold text-amber-800">PM</span>
-                <span className="w-8 h-8 rounded-full bg-indigo-100 border-2 border-white flex items-center justify-center text-xs font-bold text-indigo-800">SK</span>
-                <span className="w-8 h-8 rounded-full bg-emerald-100 border-2 border-white flex items-center justify-center text-xs font-bold text-emerald-800">RD</span>
+                <span className="w-8 h-8 rounded-full bg-rose-100 border-2 border-white flex items-center justify-center text-xs font-bold text-[#8F1027]" aria-label="Arjun Raman">AR</span>
+                <span className="w-8 h-8 rounded-full bg-amber-100 border-2 border-white flex items-center justify-center text-xs font-bold text-amber-800" aria-label="Priya Menon">PM</span>
+                <span className="w-8 h-8 rounded-full bg-indigo-100 border-2 border-white flex items-center justify-center text-xs font-bold text-indigo-800" aria-label="Sneha Kumar">SK</span>
+                <span className="w-8 h-8 rounded-full bg-emerald-100 border-2 border-white flex items-center justify-center text-xs font-bold text-emerald-800" aria-label="Rahul Desai">RD</span>
               </div>
               <p className="text-xs text-slate-600">
                 <strong className="text-slate-900 block font-semibold">12,500+ Registered Donors</strong>

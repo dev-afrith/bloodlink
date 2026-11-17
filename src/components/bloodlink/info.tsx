@@ -102,7 +102,7 @@ const faq = [
   ],
   [
     "Is BloodLink an emergency ambulance or clinical dispatch service?",
-    "No. BloodLink is a voluntary discovery and coordination platform. In acute life-threatening emergencies, immediately dial 108 / 112 or visit your nearest hospital emergency room.",
+    "No. BloodLink is a voluntary discovery and coordination platform. In acute life-threatening emergencies, immediately dial <a href='tel:108' class='underline font-bold'>108</a> / <a href='tel:112' class='underline font-bold'>112</a> or visit your nearest hospital emergency room.",
   ],
   [
     "Who is eligible to donate blood in India?",
@@ -142,7 +142,7 @@ export const infoContent: Record<
       },
       {
         title: "Urgent Medical Assistance Notice",
-        text: "If you have an urgent medical emergency, please directly reach out to your attending hospital or call emergency dispatch (108 / 112). Do not delay emergency care awaiting a digital reply.",
+        text: "If you have an urgent medical emergency, please directly reach out to your attending hospital or call emergency dispatch (<a href='tel:108' class='underline font-bold'>108</a> / <a href='tel:112' class='underline font-bold'>112</a>). Do not delay emergency care awaiting a digital reply.",
       },
       {
         title: "Voluntary Community Network",
@@ -223,7 +223,7 @@ export const infoContent: Record<
       },
       {
         title: "2. Haemoglobin & Vital Signs Screening",
-        text: "On donation day, a rapid drop of blood is tested for haemoglobin concentration, which must be at least 12.5 g/dL (both for males and females). Pulse must be regular between 50–100 bpm, and blood pressure must fall within safe physiological parameters (systolic 100–140 mmHg, diastolic 60–90 mmHg).",
+        text: "On donation day, a rapid drop of blood is tested for haemoglobin concentration, which must be at least 12.5 g/dL (both for males and females). Pulse must be regular between 50–100 bpm, and blood pressure must fall within safe physiological parameters (systolic 100–180 mmHg, diastolic 50–100 mmHg; citing NBTC 2017 / DGHS guidelines).",
       },
       {
         title: "3. General Health & Wellness",
@@ -270,7 +270,10 @@ export function InfoPage({ kind }: { kind: string }) {
                   <span>{q}</span>
                   <span className="text-[#C8102E] font-bold text-lg group-open:rotate-45 transition-transform">+</span>
                 </summary>
-                <p className="text-sm text-slate-600 mt-3 pt-3 border-t border-slate-200 leading-relaxed">{a}</p>
+                <p
+                  className="text-sm text-slate-600 mt-3 pt-3 border-t border-slate-200 leading-relaxed"
+                  dangerouslySetInnerHTML={{ __html: a || "" }}
+                />
               </details>
             ))}
           </div>
@@ -289,7 +292,10 @@ export function InfoPage({ kind }: { kind: string }) {
           {page.sections.map((s) => (
             <section key={s.title} className="p-6 bg-slate-50 border border-slate-200 rounded-2xl">
               <h2 className="text-xl font-bold font-display text-slate-900 mb-2">{s.title}</h2>
-              <p className="text-sm text-slate-600 leading-relaxed">{s.text}</p>
+              <p
+                className="text-sm text-slate-600 leading-relaxed"
+                dangerouslySetInnerHTML={{ __html: s.text || "" }}
+              />
             </section>
           ))}
           {kind === "donation-guide" && <Awareness />}

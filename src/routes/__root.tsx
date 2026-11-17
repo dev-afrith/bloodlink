@@ -20,6 +20,9 @@ import { ToastProvider } from "@/components/ui/toast-notification";
 import { BloodRequestProvider } from "@/context/blood-request-context";
 import { AuthProvider } from "@/context/auth-context";
 
+const GOOGLE_SITE_VERIFICATION =
+  "Tfa92_nInhRaAYbHE89mlSzrTYbScev04D2GTBWwTxE";
+
 /**
  * RouteChangeScrollManager
  * Ensures whenever a user navigates to a new page or route, the viewport
@@ -132,6 +135,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           "BloodLink is a premier healthcare technology platform connecting voluntary blood donors, blood banks, and urgent patient requests in real-time.",
       },
       { name: "author", content: "BloodLink" },
+      ...(GOOGLE_SITE_VERIFICATION
+        ? [{ name: "google-site-verification", content: GOOGLE_SITE_VERIFICATION }]
+        : []),
       { property: "og:title", content: "BloodLink – Every Drop Connects a Life" },
       {
         property: "og:description",

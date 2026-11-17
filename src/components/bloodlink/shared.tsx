@@ -172,7 +172,7 @@ export function Navbar() {
       <div className="bg-[#0F172A] text-white text-[11px] font-medium py-1 px-4 text-center hidden md:flex items-center justify-center gap-4 border-b border-slate-800/60">
         <span className="text-slate-300 flex items-center gap-1.5">
           <PhoneCall size={11} className="text-rose-400" />
-          Medical Emergency Helpline: <strong className="text-white">108 / 112</strong>
+          Medical Emergency Helpline: <a href="tel:108" className="text-white font-bold underline">108</a> / <a href="tel:112" className="text-white font-bold underline">112</a>
         </span>
         <span className="text-slate-500">|</span>
         <span className="text-slate-400">Voluntary blood donation discovery platform</span>
@@ -807,7 +807,7 @@ export function Footer() {
               <AlertCircle size={15} /> Acute Emergency?
             </div>
             <p className="text-[11px] text-slate-400 leading-relaxed">
-              For acute medical emergencies, call national emergency dispatch at <strong>108 / 112</strong> or visit your nearest hospital trauma center immediately.
+              For acute medical emergencies, call national emergency dispatch at <a href="tel:108" className="text-white font-bold underline">108</a> / <a href="tel:112" className="text-white font-bold underline">112</a> or visit your nearest hospital trauma center immediately.
             </p>
           </div>
           <Button asChild className="w-full bg-gradient-to-r from-[#C8102E] to-[#8F1027] hover:from-[#A60D25] hover:to-[#730D20] text-white font-semibold shadow-md rounded-xl h-11 text-xs">

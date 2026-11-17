@@ -33,6 +33,42 @@ import {
 } from "@/data/demo";
 import { DemoNotice } from "./shared";
 
+// Helper to compute donor eligibility based on 90-day male / 120-day female standard
+function computeEligibility(lastDonationStr: string, gender: "male" | "female" = "male"): { isEligible: boolean; daysRemaining: number } {
+  try {
+    const lastDate = new Date(lastDonationStr);
+    if (isNaN(lastDate.getTime())) return { isEligible: true, daysRemaining: 0 };
+    const intervalDays = gender === "female" ? 120 : 90;
+    const now = new Date();
+    const diffTime = now.getTime() - lastDate.getTime();
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+    const daysRemaining = intervalDays - diffDays;
+    return {
+      isEligible: daysRemaining <= 0,
+      daysRemaining: Math.max(0, daysRemaining),
+    };
+  } catch {
+    return { isEligible: true, daysRemaining: 0 };
+  }
+}
+
+// Helper to compute relative time from request date
+function computeRelativeTime(dateStr: string): string {
+  try {
+    const d = new Date(dateStr);
+    if (isNaN(d.getTime())) return "Recently";
+    const now = new Date();
+    const diffSec = Math.floor((now.getTime() - d.getTime()) / 1000);
+    if (diffSec < 60) return "Just now";
+    if (diffSec < 3600) return `${Math.floor(diffSec / 60)} min ago`;
+    if (diffSec < 86400) return `${Math.floor(diffSec / 3600)}h ago`;
+    const days = Math.floor(diffSec / 86400);
+    return `${days}d ago`;
+  } catch {
+    return "Recently";
+  }
+}
+
 const compatibility: Record<string, { donateTo: string; receiveFrom: string; clinicalRole: string }> = {
   "O-": {
     donateTo: "All Blood Groups (Universal Red Cell Donor: O-, O+, A-, A+, B-, B+, AB-, AB+)",
@@ -260,26 +296,34 @@ export function DonorSearch({
             </Button>
           </div>
         ) : (
-          visibleDonors.map((d) => (
+          visibleDonors.map((d) => {
+            const elig = computeEligibility(d.lastDonation, "male");
+            return (
             <article className="donor-card group hover:-translate-y-1.5 transition-all duration-300 hover:shadow-xl hover:border-rose-300 relative overflow-hidden" key={d.id}>
               <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#C8102E]/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-              <div className="donor-top">
-                <div className="flex items-center gap-3">
-                  <span className={`avatar avatar-${d.id % 3} ring-2 ring-white shadow-sm font-bold text-slate-800`}>
+              <div className="donor-top flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2.5 min-w-0">
+                  <span
+                    className={`avatar avatar-${d.id % 3} ring-2 ring-white shadow-sm font-bold text-slate-800 shrink-0`}
+                    aria-label={`Avatar for ${d.name}`}
+                  >
                     {d.name
                       .split(" ")
                       .map((s) => s[0])
                       .join("")}
                   </span>
-                  <div>
-                    <h3 className="font-bold text-slate-900 group-hover:text-[#C8102E] transition-colors">{d.name}</h3>
-                    <p className="text-xs text-slate-500 flex items-center gap-1">
-                      <MapPin size={13} className="text-[#C8102E]" />
-                      {d.area}, {d.city}
+                  <div className="min-w-0">
+                    <h3 className="font-bold text-slate-900 group-hover:text-[#C8102E] transition-colors truncate">{d.name}</h3>
+                    <p className="text-xs text-slate-500 flex items-center gap-1 truncate">
+                      <MapPin size={13} className="text-[#C8102E] shrink-0" />
+                      <span className="truncate">{d.area}, {d.city}</span>
                     </p>
                   </div>
                 </div>
-                <span className="blood-badge shadow-sm font-black text-sm">
+                <span
+                  className="blood-badge shadow-sm font-black text-sm shrink-0"
+                  aria-label={`Blood group ${d.group}`}
+                >
                   <Droplet size={13} className="fill-current text-[#C8102E]" />
                   {d.group}
                 </span>
@@ -288,16 +332,21 @@ export function DonorSearch({
               <div className="donor-date text-xs text-slate-500 py-2 flex items-center justify-between border-y border-slate-100 my-3 bg-slate-50/50 px-2 rounded-lg">
                 <span className="flex items-center gap-1.5">
                   <Clock size={13} className="text-slate-400" />
-                  Simulated Last Donation:
+                  Last donated:
                 </span>
                 <span className="font-semibold text-slate-700">{d.lastDonation}</span>
               </div>
 
               <div className="donor-bottom flex items-center justify-between pt-1">
-                <span className={d.available ? "status success" : "status neutral"}>
-                  <i />
-                  {d.available ? "Open to Donate" : "Deferred"}
-                </span>
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className={d.available ? "status success" : "status neutral"}>
+                    <i />
+                    {d.available ? "Open to Donate" : "Deferred"}
+                  </span>
+                  <span className={`text-[11px] font-semibold font-mono tabular-nums ${elig.isEligible ? "text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200" : "text-slate-500 bg-slate-100 px-2 py-0.5 rounded"}`}>
+                    {elig.isEligible ? "Eligible now" : `Eligible in ${elig.daysRemaining} days`}
+                  </span>
+                </div>
                 <Button
                   variant="link"
                   className="text-[#C8102E] hover:text-[#8F1027] font-semibold text-xs p-0 h-auto"
@@ -307,7 +356,8 @@ export function DonorSearch({
                 </Button>
               </div>
             </article>
-          ))
+            );
+          })
         )}
       </div>
 
@@ -488,6 +538,18 @@ export function Requests({ compact = false }: { compact?: boolean }) {
     (r) => (!group || r.group === group) && (!urgencyFilter || r.urgency === urgencyFilter),
   );
 
+  // Sort requests: active first (Critical/Urgent/Priority then Planned), expired requests last
+  const nowMs = Date.now();
+  const sortedResults = [...results].sort((a, b) => {
+    const aDate = new Date(a.date).getTime();
+    const bDate = new Date(b.date).getTime();
+    const aExpired = isNaN(aDate) ? false : aDate < nowMs - 7 * 86400 * 1000;
+    const bExpired = isNaN(bDate) ? false : bDate < nowMs - 7 * 86400 * 1000;
+    if (aExpired && !bExpired) return 1;
+    if (!aExpired && bExpired) return -1;
+    return 0;
+  });
+
   return (
     <>
       {/* Need Blood? Submit a Request Banner */}
@@ -549,32 +611,67 @@ export function Requests({ compact = false }: { compact?: boolean }) {
       </div>
 
       <div className="request-grid">
-        {(compact ? results.slice(0, 3) : results).map((r) => (
-          <article className="request-card group hover:-translate-y-1.5 transition-all duration-300 hover:shadow-xl hover:border-rose-300 relative overflow-hidden" key={r.id}>
-            <div className={`absolute top-0 left-0 bottom-0 w-1.5 ${r.urgency === "Urgent" ? "bg-[#C8102E]" : r.urgency === "Priority" ? "bg-amber-500" : "bg-blue-500"}`} />
+        {(compact ? sortedResults.slice(0, 3) : sortedResults).map((r) => {
+          const reqDate = new Date(r.date).getTime();
+          const isExpired = !isNaN(reqDate) && reqDate < nowMs - 7 * 86400 * 1000;
+          const relativeTime = computeRelativeTime(r.date);
+          const unitsDisplay = r.units === 1 ? "1 unit required" : `${r.units} units required`;
+
+          return (
+          <article
+            className={`request-card group hover:-translate-y-1.5 transition-all duration-300 relative overflow-hidden ${
+              isExpired
+                ? "opacity-60 grayscale border-slate-300 bg-slate-50"
+                : "hover:shadow-xl hover:border-rose-300"
+            }`}
+            key={r.id}
+          >
+            <div className={`absolute top-0 left-0 bottom-0 w-1.5 ${isExpired ? "bg-slate-400" : r.urgency === "Urgent" ? "bg-[#C8102E]" : r.urgency === "Priority" ? "bg-amber-500" : "bg-blue-500"}`} />
+            
             <div className="request-top flex items-center justify-between">
-              <span className="request-group text-2xl font-black text-[#C8102E] flex items-center gap-1.5">
+              <span
+                className="request-group text-2xl font-black text-[#C8102E] flex items-center gap-1.5"
+                aria-label={`Blood group ${r.group}`}
+              >
                 {r.group}
                 <Droplet size={18} className="fill-[#C8102E]" />
               </span>
               <span
                 className={`status ${
-                  r.urgency === "Urgent"
+                  isExpired
+                    ? "bg-slate-200 text-slate-700 font-medium"
+                    : r.urgency === "Urgent"
                     ? "urgent bg-rose-100 text-[#C8102E] font-bold"
                     : r.urgency === "Priority"
                       ? "warning bg-amber-100 text-amber-800 font-semibold"
                       : "neutral bg-slate-100 text-slate-700 font-medium"
                 }`}
               >
-                {r.urgency === "Urgent" && <span className="animate-ping w-1.5 h-1.5 rounded-full bg-[#C8102E] inline-block mr-1" />}
-                {r.urgency} · Scenario
+                {!isExpired && r.urgency === "Urgent" && <span className="animate-ping w-1.5 h-1.5 rounded-full bg-[#C8102E] inline-block mr-1" />}
+                {isExpired ? "Expired" : `${r.urgency} · Scenario`}
               </span>
+            </div>
+
+            {/* Countdown bar draining toward request date */}
+            <div className="request-countdown-bar w-full bg-slate-100 rounded-full h-1.5 my-2.5 overflow-hidden">
+              <div
+                className={`h-full rounded-full transition-all duration-500 ${
+                  isExpired
+                    ? "bg-slate-300 w-0"
+                    : r.urgency === "Urgent"
+                    ? "bg-[var(--critical,#B42318)]"
+                    : r.urgency === "Priority"
+                    ? "bg-[var(--urgent,#B45309)]"
+                    : "bg-[var(--planned,#0E7490)]"
+                }`}
+                style={{ width: isExpired ? "0%" : `${Math.max(15, Math.min(100, (r.units / 4) * 100))}%` }}
+              />
             </div>
 
             <h3 className="font-bold text-slate-900 text-base mb-1 group-hover:text-[#C8102E] transition-colors">{r.hospital} <span className="text-xs font-normal text-slate-500">(Illustrative)</span></h3>
             <p className="text-xs text-slate-500 flex items-center gap-1 mb-3">
               <MapPin size={13} className="text-[#C8102E]" />
-              {r.city} <span className="font-semibold text-slate-700">· {r.units} units required</span>
+              {r.city} <span className="font-semibold text-slate-700 font-mono tabular-nums">· {unitsDisplay}</span>
             </p>
 
             {/* Requirement progress bar */}
@@ -589,21 +686,30 @@ export function Requests({ compact = false }: { compact?: boolean }) {
 
             <div className="request-meta text-xs text-slate-500 flex justify-between border-t border-slate-100 pt-3">
               <span className="font-medium text-slate-700">{r.category}</span>
-              <span className="font-mono text-slate-400 font-semibold">{r.id}</span>
+              <div className="flex items-center gap-2 font-mono tabular-nums text-slate-400 font-semibold text-[11px]">
+                <span>{relativeTime}</span>
+                <span>·</span>
+                <span>{r.id}</span>
+              </div>
             </div>
 
             <div className="request-footer flex items-center justify-between mt-3 pt-2">
-              <small className="text-xs text-slate-400">Scenario date: {r.date}</small>
-              <Button
-                variant="link"
-                className="text-[#C8102E] hover:text-[#8F1027] font-semibold text-xs p-0 h-auto"
-                onClick={() => setDetail(r)}
-              >
-                Inspect Scenario <ArrowRight size={14} className="ml-0.5 group-hover:translate-x-1 transition-transform" />
-              </Button>
+              <small className="text-xs text-slate-400 font-mono tabular-nums">Scenario date: {r.date}</small>
+              {!isExpired ? (
+                <Button
+                  variant="link"
+                  className="text-[#C8102E] hover:text-[#8F1027] font-semibold text-xs p-0 h-auto"
+                  onClick={() => setDetail(r)}
+                >
+                  Inspect Scenario <ArrowRight size={14} className="ml-0.5 group-hover:translate-x-1 transition-transform" />
+                </Button>
+              ) : (
+                <span className="text-xs text-slate-400 italic">No action needed</span>
+              )}
             </div>
           </article>
-        ))}
+          );
+        })}
       </div>
 
       {results.length === 0 && (
@@ -651,7 +757,9 @@ export function Requests({ compact = false }: { compact?: boolean }) {
             <div className="p-3.5 bg-rose-50/70 border border-rose-100 rounded-xl space-y-2 text-xs">
               <div className="flex justify-between items-center">
                 <span className="text-slate-600">Blood Requirement:</span>
-                <strong className="text-base text-[#C8102E] font-bold">{detail?.units} Units ({detail?.group})</strong>
+                <strong className="text-base text-[#C8102E] font-bold font-mono tabular-nums">
+                  {detail?.units === 1 ? "1 Unit" : `${detail?.units} Units`} ({detail?.group})
+                </strong>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-slate-600">Urgency Classification:</span>

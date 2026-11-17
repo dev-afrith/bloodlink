@@ -12,3 +12,5 @@ Allow: /
 
 User-agent: *
 Allow: /
+
+Sitemap: https://bloodlink.afrith15.workers.dev/sitemap.xml
