@@ -146,7 +146,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       { property: "og:type", content: "website" },
       { property: "og:site_name", content: "BloodLink" },
-      { property: "og:image", content: "/og-image.svg" },
+      { property: "og:image", content: "/og-image.png" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "BloodLink – Every Drop Connects a Life" },
       {
@@ -154,14 +154,16 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         content:
           "Connecting voluntary blood donors, hospitals, and communities in real-time. Fast, secure, and community-driven.",
       },
-      { name: "twitter:image", content: "/og-image.svg" },
+      { name: "twitter:image", content: "/og-image.png" },
     ],
     links: [
       {
         rel: "stylesheet",
         href: appCss,
       },
+      { rel: "icon", href: "/favicon.ico", sizes: "32x32" },
       { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
+      { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
     ],
   }),
   shellComponent: RootShell,
